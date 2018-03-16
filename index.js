@@ -39,7 +39,7 @@ SmoothScroll.prototype = function(){
     _requestTick.call(this); // start animation
   };
 
-  const _onTouchStart = function(){
+  const _onTouchStart = function(e){
 		const t = (e.targetTouches) ? e.targetTouches[0] : e;
 		this.move.touchY = t.pageY;
   };
@@ -118,7 +118,7 @@ SmoothScroll.prototype = function(){
 
     if(this.deviceHasEvents.touch){
       document[listener]("touchstart", _onTouchStart.bind(this));
-      document[listener]("touchmove", _onTouchMove.bond(this));
+      document[listener]("touchmove", _onTouchMove.bind(this));
     }
   },
 
