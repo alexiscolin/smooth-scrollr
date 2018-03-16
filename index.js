@@ -84,7 +84,7 @@ SmoothScroll.prototype = function(){
     this.rAF = requestAnimationFrame(_update.bind(this));
 
     // get scroll Level inside body size
-    this.move.destY = Math.max(0, Math.min(this.move.destY, this.config.scrollMax));
+    this.move.destY = Math.round(Math.max(0, Math.min(this.move.destY, this.config.scrollMax)));
 
     // calc new value of scroll if there was a scroll
     if(this.move.prevY !== this.move.destY){
