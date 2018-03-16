@@ -208,9 +208,9 @@ SmoothScroll.prototype = function(){
 
   return {
     init,
-    resize,
     bindEvent,
-    unbindEvent
+    unbindEvent,
+		resize
   }
 }();
 
