@@ -1,3 +1,4 @@
+
 /*==============================*/
 /*==============================*/
 /*     MODULE SMOOTHSCROLL      */
@@ -27,7 +28,7 @@ SmoothScroll.prototype = function(){
 
   const _onWheel = function(e){
     e.preventDefault(); //need it here ?
-    this.move.destY += e.deltaY;
+    this.move.destY += (this.runFirefox && e.deltaMode == 1) ? (e.deltaY * this.config.speed) * this.config.multFirefox : e.deltaY * this.config.speed;
 
     _requestTick.call(this); // start animation
   };
@@ -142,6 +143,9 @@ SmoothScroll.prototype = function(){
 
   const init = function(config){
 
+    // detect if the browser is Firefox
+    this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
+
     // get browser compatibility
     this.deviceHasEvents = _deviceDetectEvent();
 
@@ -152,9 +156,11 @@ SmoothScroll.prototype = function(){
     // configurations
     this.config = {
       delay: config.delay || .1,
-      touchSpeed: config.touchSpeed || 2,
-      jump: config.jump || 120,
+      speed: config.speed || 1,
+      touchSpeed: config.touchSpeed || 1.5,
+      jump: config.jump || 110,
       parallax: config.parallax || false,
+      multFirefox: 15,
       scrollMax: 0,
       ticking: false
     };
@@ -194,7 +200,10 @@ SmoothScroll.prototype = function(){
   /* */
   unbindEvent = function(){
     _domEvent.call(this, 'unbind');
-    if(typeof this.rAF !== 'undefined') cancelAnimationFrame(this.rAF);
+    if(typeof this.rAF !== 'undefined'){
+      cancelAnimationFrame(this.rAF);
+      this.rAF = null;
+    }
   },
 
 
@@ -208,9 +217,9 @@ SmoothScroll.prototype = function(){
 
   return {
     init,
+    resize,
     bindEvent,
-    unbindEvent,
-		resize
+    unbindEvent
   }
 }();
 
