@@ -32,5 +32,5 @@ let smoothscroll = new SmoothScroll({
 #### ```bindEvent```
 In order to bind scrolling events to the DOM and start a requestAnimationFrame (auto in new instance, use it after an unbind method) 
 
-#### ```bindEvent```
+#### ```unbindEvent```
 In order to unbind scrolling events to the DOM and cancel the requestAnimationFrame
