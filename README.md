@@ -4,7 +4,7 @@ Simple smooth scrolling and parallaxe module based on fake scroll events (aka wh
 ## Getting Started
 Made as a prototype reveal based class, initialize the module to use it.
 
-```
+``` javascript
 import { SmoothScroll } from 'smooth-scroll';
 let smoothscroll = new SmoothScroll({
   parallax: true,
