@@ -109,7 +109,7 @@ SmoothScroll.prototype = function(){
   /* */
   _domEvent = function(method = 'bind'){
     const listener = method === 'bind' ? 'addEventListener' : (method === 'unbind' ? 'removeEventListener' : null);
-    if(listener === null) throw "_domEvent function - wrong method! expect 'on' || 'off' : got " + method;
+    if(listener === null) throw "_domEvent function - wrong method! expect 'bind' || 'unbind' : got " + method;
 
     // Events modifications
     this.deviceHasEvents.wheel && document[listener]('wheel', _onWheel.bind(this), false);
