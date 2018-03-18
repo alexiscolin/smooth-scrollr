@@ -144,8 +144,8 @@ SmoothScroll.prototype = function(){
   const init = function(config, viewPortclass){
 
     // DOM elements
-    this.DOM.body = document.body;
-    this.DOM.scroller = document.getElementById('main-container');
+    this.DOM.scroller =  document.querySelector('.js-scroller');
+    this.DOM.container = this.DOM.scroller.parentNode;
 
     // configurations
     this.config = {
@@ -155,6 +155,7 @@ SmoothScroll.prototype = function(){
       jump: config.jump || 110,
       parallax: config.parallax || false,
       touch: config.touch || false,
+      fixedClass: viewPortclass || false,
       multFirefox: 15,
       scrollMax: 0,
       ticking: false
@@ -171,9 +172,17 @@ SmoothScroll.prototype = function(){
     // detect if the browser is Firefox
     this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
 
-    // get browser compatibility and set touch event
+    // récupérer la compatibilité navigateur des évenements
     this.deviceHasEvents = _deviceDetectEvent();
     this.deviceHasEvents.touch = this.deviceHasEvents.touch && this.config.touch || false;
+
+    // set the container sticky
+    if(this.config.fixedClass){
+      this.DOM.container.classList.add(this.config.fixedClass);
+    }else{
+      this.DOM.container.style.overflow = 'hidden';
+      this.DOM.container.style.height = '100vh';
+    }
 
     // if parallax, get elements to move
     this.prlxItems = this.config.parallax ? new Parallax() : null;
