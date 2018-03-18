@@ -171,7 +171,7 @@ SmoothScroll.prototype = function(){
     // detect if the browser is Firefox
     this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
 
-    // récupérer la compatibilité navigateur des évenements
+    // get browser compatibility and set touch event
     this.deviceHasEvents = _deviceDetectEvent();
     this.deviceHasEvents.touch = this.deviceHasEvents.touch && this.config.touch || false;
 
