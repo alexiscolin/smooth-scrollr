@@ -5,13 +5,13 @@
 /*==============================*/
 /*==============================*/
 
-var SmoothScroll = function(config = {}){
+var SmoothScroll = function(config = {}, viewPortclass = null){
   this.DOM = {};
   this.config = {};
   this.move = {};
   this.prlxItems = [];
 
-  this.init(config);
+  this.init(config, viewPortclass);
 };
 
 
@@ -141,13 +141,7 @@ SmoothScroll.prototype = function(){
    ****** PUBLICS ******
    *********************/
 
-  const init = function(config){
-
-    // detect if the browser is Firefox
-    this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
-
-    // get browser compatibility
-    this.deviceHasEvents = _deviceDetectEvent();
+  const init = function(config, viewPortclass){
 
     // DOM elements
     this.DOM.body = document.body;
@@ -160,6 +154,7 @@ SmoothScroll.prototype = function(){
       touchSpeed: config.touchSpeed || 1.5,
       jump: config.jump || 110,
       parallax: config.parallax || false,
+      touch: config.touch || false,
       multFirefox: 15,
       scrollMax: 0,
       ticking: false
@@ -173,8 +168,12 @@ SmoothScroll.prototype = function(){
       touchY: 0
     };
 
-    // vars
-    this.rAF = undefined;
+    // detect if the browser is Firefox
+    this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
+
+    // récupérer la compatibilité navigateur des évenements
+    this.deviceHasEvents = _deviceDetectEvent();
+    this.deviceHasEvents.touch = this.deviceHasEvents.touch && this.config.touch || false;
 
     // if parallax, get elements to move
     this.prlxItems = this.config.parallax ? new Parallax() : null;
