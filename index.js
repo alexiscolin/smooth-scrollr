@@ -64,6 +64,11 @@ SmoothScroll.prototype = function(){
     _requestTick.call(this); // start animation
 	};
 
+  const _onScroll = function(e){
+    this.move.destY = window.scrollY || window.pageYOffset;
+    _requestTick.call(this); // start animation
+  };
+
 
   /**
   /*  REQUEST-TICK - request an animation from rAF if rAF is available  */
@@ -92,7 +97,7 @@ SmoothScroll.prototype = function(){
 
       // update scroll && parallax positions
       const moveTo = -this.move.currentY.toFixed(2);
-      this.DOM.scroller.style.transform = `translate3D(0,${moveTo}px, 0)`;
+      this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(0,${moveTo}px, 0)`;
       this.prlxItems && this.prlxItems.update(moveTo);
 
       this.move.prevY = Math.round(this.move.currentY);
@@ -111,16 +116,37 @@ SmoothScroll.prototype = function(){
     const listener = method === 'bind' ? 'addEventListener' : (method === 'unbind' ? 'removeEventListener' : null);
     if(listener === null) throw "_domEvent function - wrong method! expect 'bind' || 'unbind' : got " + method;
 
-    // Events modifications
-    this.deviceHasEvents.wheel && document[listener]('wheel', _onWheel.bind(this), false);
-    this.deviceHasEvents.mouseWheel && document[listener]('mousewheel', _onMouseWheel.bind(this), false);
-    this.deviceHasEvents.keys && document[listener]('keydown', _onKeydown.bind(this), false);
+    // on/off smooth scroll events on device
+    if(this.enableSmoothScroll){
+      // Events modifications
+      this.deviceHasEvents.wheel && document[listener]('wheel', _onWheel.bind(this), false);
+      this.deviceHasEvents.mouseWheel && document[listener]('mousewheel', _onMouseWheel.bind(this), false);
+      this.deviceHasEvents.keys && document[listener]('keydown', _onKeydown.bind(this), false);
 
-
-    if(this.deviceHasEvents.touch){
-      document[listener]("touchstart", _onTouchStart.bind(this));
-      document[listener]("touchmove", _onTouchMove.bind(this));
+      if(this.deviceHasEvents.touch){
+        document[listener]("touchstart", _onTouchStart.bind(this));
+        document[listener]("touchmove", _onTouchMove.bind(this));
+      }
+    }else if(this.config.parallax){
+      // bind scroll if touch is disabled and parallax enabled
+      document[listener]("scroll", _onScroll.bind(this));
     }
+  },
+
+
+  /**
+  /*  FIXED-VIEWPORT - block the viewport for smoothscroll with class or inline style */
+  /* */
+  _fixedViewPort = function(){
+
+    // set the container sticky
+    if(this.config.fixedClass){
+      this.DOM.container.classList.add(this.config.fixedClass);
+    }else{
+      this.DOM.container.style.overflow = 'hidden';
+      this.DOM.container.style.height = '100vh';
+    }
+    return true;
   },
 
 
@@ -172,17 +198,9 @@ SmoothScroll.prototype = function(){
     // detect if the browser is Firefox
     this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
 
-    // récupérer la compatibilité navigateur des évenements
+    // get event compatibility and allowance for scroll
     this.deviceHasEvents = _deviceDetectEvent();
-    this.deviceHasEvents.touch = this.deviceHasEvents.touch && this.config.touch || false;
-
-    // set the container sticky
-    if(this.config.fixedClass){
-      this.DOM.container.classList.add(this.config.fixedClass);
-    }else{
-      this.DOM.container.style.overflow = 'hidden';
-      this.DOM.container.style.height = '100vh';
-    }
+    this.enableSmoothScroll = !this.deviceHasEvents.touch || this.config.touch;
 
     // if parallax, get elements to move
     this.prlxItems = this.config.parallax ? new Parallax() : null;
@@ -199,6 +217,7 @@ SmoothScroll.prototype = function(){
   /*  BIND-EVENT - bind events to the DOM && start rAF */
   /* */
   bindEvent = function(){
+    this.enableSmoothScroll && _fixedViewPort.call(this);
     _domEvent.call(this, 'bind');
   },
 
