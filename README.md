@@ -1,4 +1,4 @@
-# smooth-scroll
+# 🖱️ smooth-scroll
 Simple smooth scrolling and parallaxe module based on fake scroll events (aka wheel and touch and keyPress...).
 
 ## Getting Started
