@@ -122,7 +122,7 @@ SmoothScroll.prototype = function(){
       // Events modifications
       this.deviceHasEvents.wheel && (this._wheelFunc || (this._wheelFunc = _onWheel.bind(this))) && document[listener]('wheel', this._wheelFunc, false);
       this.deviceHasEvents.mouseWheel && (this._mouWheelFunc || (this._mouWheelFunc = _onWheel.bind(this))) && document[listener]('mousewheel', this._mouWheelFunc, false);
-      this.deviceHasEvents.keys  && (this._keysFunc || (this._keysFunc = _onWheel.bind(this))) && document[listener]('keydown', this._keysFunc, false);
+      this.deviceHasEvents.keys  && (this._keysFunc || (this._keysFunc = _onKeydown.bind(this))) && document[listener]('keydown', this._keysFunc, false);
 
       if(this.deviceHasEvents.touch){
         !this._touchStatFunc && (this._touchStatFunc = _onTouchStart.bind(this));
