@@ -118,18 +118,24 @@ SmoothScroll.prototype = function(){
 
     // on/off smooth scroll events on device
     if(this.enableSmoothScroll){
+
       // Events modifications
-      this.deviceHasEvents.wheel && document[listener]('wheel', _onWheel.bind(this), false);
-      this.deviceHasEvents.mouseWheel && document[listener]('mousewheel', _onMouseWheel.bind(this), false);
-      this.deviceHasEvents.keys && document[listener]('keydown', _onKeydown.bind(this), false);
+      this.deviceHasEvents.wheel && (this._wheelFunc || (this._wheelFunc = _onWheel.bind(this))) && document[listener]('wheel', this._wheelFunc, false);
+      this.deviceHasEvents.mouseWheel && (this._mouWheelFunc || (this._mouWheelFunc = _onWheel.bind(this))) && document[listener]('mousewheel', this._mouWheelFunc, false);
+      this.deviceHasEvents.keys  && (this._keysFunc || (this._keysFunc = _onWheel.bind(this))) && document[listener]('keydown', this._keysFunc, false);
 
       if(this.deviceHasEvents.touch){
-        document[listener]("touchstart", _onTouchStart.bind(this));
-        document[listener]("touchmove", _onTouchMove.bind(this));
+        !this._touchStatFunc && (this._touchStatFunc = _onTouchStart.bind(this));
+        !this._touchMoveFunc && (this._touchMoveFunc = _onTouchMove.bind(this));
+
+        document[listener]("touchstart", this._touchStatFunc);
+        document[listener]("touchmove", this._touchMoveFunc);
       }
+
     }else if(this.config.parallax){
       // bind scroll if touch is disabled and parallax enabled
-      document[listener]("scroll", _onScroll.bind(this));
+      !this._scrollFunc && (this._scrollFunc = _onScroll.bind(this));
+      document[listener]("scroll", this._scrollFunc, false);
     }
   },
 
