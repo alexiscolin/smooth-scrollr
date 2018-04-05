@@ -256,5 +256,10 @@ SmoothScroll.prototype = function(){
   }
 }();
 
+// SETTER / GETTER
+Object.defineProperty(SmoothScroll.prototype, "preventScroll", {
+  set: function(state) { this.prevent = state; }
+});
+
 
 export { SmoothScroll };
