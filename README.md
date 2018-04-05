@@ -43,6 +43,6 @@ In order to unbind scrolling events to the DOM and cancel the requestAnimationFr
 #### ```preventScroll``` - setter
 In order to freeze scrolling movement. Change this property by setting it to true/false.
 ``` javascript
-smoothscroll.preventScroll = true // freeze scroll
-smoothscroll.preventScroll = false // let it free
+smoothscroll.preventScroll = true; // freeze scroll
+smoothscroll.preventScroll = false; // let it free
 ```
