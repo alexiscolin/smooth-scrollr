@@ -97,7 +97,7 @@ SmoothScroll.prototype = function(){
 
       // update scroll && parallax positions
       const moveTo = -this.move.currentY.toFixed(2);
-      this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(0,${moveTo}px, 0)`;
+      this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(0,${moveTo}px, 0)`;
       this.prlxItems && this.prlxItems.update(moveTo);
 
       this.move.prevY = Math.round(this.move.currentY);
