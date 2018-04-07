@@ -40,10 +40,10 @@ In order to bind scrolling events to the DOM and start a requestAnimationFrame (
 In order to unbind scrolling events to the DOM and cancel the requestAnimationFrame
 
 #### ```scrollTo```
-    COME SOON!
+    COMING SOON!
 
 #### ```destroy```
-    COME SOON!
+    COMING SOON!
 
 ## Properties
 #### ```preventScroll``` - setter
