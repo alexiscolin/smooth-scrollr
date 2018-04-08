@@ -246,13 +246,34 @@ SmoothScroll.prototype = function(){
   resize = function(){
     this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
   };
+	
+	
+  /**
+  /*  DESTROY - destroy content */
+  /* */
+  destroy = function(){
+    this.prlx = this.prlx.destroy();
+    delete this.prlx;
+
+    this.unbindEvent.call(this);
+
+    for(let prop in this){
+      if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
+
+      this[prop] = null;
+      delete this[prop];
+    }
+
+    return null;
+  };
 
 
   return {
     init,
     resize,
     bindEvent,
-    unbindEvent
+    unbindEvent,
+    destroy
   }
 }();
 
