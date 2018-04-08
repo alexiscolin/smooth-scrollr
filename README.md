@@ -39,10 +39,11 @@ In order to bind scrolling events to the DOM and start a requestAnimationFrame (
 #### ```unbindEvent```
 In order to unbind scrolling events to the DOM and cancel the requestAnimationFrame
 
-#### ```scrollTo```
-    COMING SOON!
-
 #### ```destroy```
+In order to destroy smooth-scroll class instance and all its properties.
+  
+
+#### ```scrollTo```
     COMING SOON!
 
 ## Properties
