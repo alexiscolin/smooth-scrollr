@@ -1,6 +1,8 @@
 # 🖱️ smooth-scroll
 Simple smooth scrolling and parallaxe module based on fake scroll events (aka wheel and touch and keyPress...).
 
+
+
 ## Getting Started
 Made as a prototype reveal based class, initialize the module to use it.
 
@@ -16,6 +18,11 @@ let smoothscroll = new SmoothScroll({
   jump: 120,
 }, 'fixedClass');
 ```
+
+### Notes about tools
+* ES6
+* Prototype reveal pattern
+
 ## Options and Settings
 **parallax** - Boolean (optional | default: false) enable parallax on scroll from parallax module;
 
