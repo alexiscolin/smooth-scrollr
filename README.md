@@ -1,4 +1,4 @@
-# 🖱️ smooth-scrollr
+# smooth-scrollr 🖱️
 Simple smooth scrolling and parallaxe module based on fake scroll events (aka wheel and touch and keyPress...).
 
 ### TODO
@@ -6,7 +6,7 @@ Simple smooth scrolling and parallaxe module based on fake scroll events (aka wh
 - [x] destroy method
 - [ ] init method to defered initialization
 - [ ] horizontal scroll support
-- [ ] add a progress bar
+- [ ] add a scroll bar
 
 
 ## Getting Started
