@@ -1,4 +1,4 @@
-# 🖱️ smooth-scroll
+# 🖱️ smooth-scrollr
 Simple smooth scrolling and parallaxe module based on fake scroll events (aka wheel and touch and keyPress...).
 
 
@@ -6,8 +6,15 @@ Simple smooth scrolling and parallaxe module based on fake scroll events (aka wh
 ## Getting Started
 Made as a prototype reveal based class, initialize the module to use it.
 
+### Installation
+By using yarn or npm :
+
+`yarn add smooth-scrollr`
+`npm i smooth-scrollr`
+
+
 ``` javascript
-import { SmoothScroll } from 'smooth-scroll';
+import { SmoothScroll } from 'smooth-scrollr';
 
 let smoothscroll = new SmoothScroll({
   parallax: true,
@@ -41,14 +48,14 @@ let smoothscroll = new SmoothScroll({
 
 ## Methods
 #### ```bindEvent```
-In order to bind scrolling events to the DOM and start a requestAnimationFrame (auto in new instance, use it after an unbind method) 
+In order to bind scrolling events to the DOM and start a requestAnimationFrame (auto in new instance, use it after an unbind method)
 
 #### ```unbindEvent```
 In order to unbind scrolling events to the DOM and cancel the requestAnimationFrame
 
 #### ```destroy```
 In order to destroy smooth-scroll class instance and all its properties.
-  
+
 
 #### ```scrollTo```
 In order to force scroll to a location on the webpage. This method has two parameters, the first one is for the location on the page (in px) and the second one is used to tell the method if you want a smooth scroll or an imediate position rendering (true/false).
