@@ -7,9 +7,10 @@ Simple smooth scrolling and parallaxe module based on fake scroll events (aka wh
 Made as a prototype reveal based class, initialize the module to use it.
 
 ### Installation
-By using yarn or npm :
-
+By using yarn:
 `yarn add smooth-scrollr`
+
+or npm:
 `npm i smooth-scrollr`
 
 
