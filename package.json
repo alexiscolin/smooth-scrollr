@@ -1,0 +1,19 @@
+{
+  "name": "smooth-scrollr",
+  "version": "0.1.1",
+  "description": "🖱Simple smooth scrolling in JS",
+  "main": "index.js",
+  "repository": {
+    "url": "https://github.com/alexiscolin/smoothscroller.git",
+    "type": "git"
+  },
+  "keywords": [
+    "smooth",
+    "smoothscroll",
+    "scroll",
+    "easing",
+    "parallax"
+  ],
+  "author": "Alexis Colin",
+  "license": "MIT"
+}
