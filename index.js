@@ -238,6 +238,16 @@ SmoothScroll.prototype = function(){
       this.rAF = null;
     }
   },
+	
+	
+  /**
+  /*  SCROLL-TO - scroll to given location */
+  /* */
+  scrollTo = function(dir, immediate = false){
+    this.move.destY = dir;
+    immediate || (_requestTick.call(this)); // start animation
+    immediate && (this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(0,${dir}px, 0)`);
+  },
 
 
   /**
