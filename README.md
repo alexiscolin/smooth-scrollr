@@ -44,7 +44,10 @@ In order to destroy smooth-scroll class instance and all its properties.
   
 
 #### ```scrollTo```
-    COMING SOON!
+In order to force scroll to a location on the webpage. This method has two parameters, the first one is for the location on the page (in px) and the second one is used to tell the method if you want a smooth scroll or an imediate position rendering (true/false).
+```javascript
+smoothscroll.scrollTo(0, true); // go to the top without smoothing
+```
 
 ## Properties
 #### ```preventScroll``` - setter
