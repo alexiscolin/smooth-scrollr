@@ -214,8 +214,11 @@ SmoothScroll.prototype = function(){
     //bind events
     bindEvent.call(this);
 
-    // calc max height;
-    resize.call(this);
+    // calc max height
+    this.config.scrollMax = 0;
+    window.addEventListener('load', ()=>{
+      this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
+    });   
   },
 
 
