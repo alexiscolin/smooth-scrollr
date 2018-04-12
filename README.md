@@ -1,14 +1,6 @@
 # smooth-scrollr 🖱️
 Simple smooth scrolling and parallaxe module based on fake scroll events (aka wheel and touch and keyPress...).
 
-### TODO
-- [x] ScrollTo method
-- [x] destroy method
-- [ ] init method to defered initialization
-- [ ] horizontal scroll support
-- [ ] add a scroll bar
-
-
 ## Getting Started
 Made as a prototype reveal based class, initialize the module to use it.
 
@@ -23,14 +15,16 @@ or npm:
 ``` javascript
 import { SmoothScroll } from 'smooth-scrollr';
 
-let smoothscroll = new SmoothScroll({
+const opts = {
   parallax: true,
   touch: false,
   delay: .1,
   speed: .8,
   touchSpeed: 2,
   jump: 120,
-}, 'fixedClass');
+};
+
+const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 ```
 
 ### Notes about tools
@@ -77,3 +71,11 @@ In order to freeze scrolling movement. Change this property by setting it to tru
 smoothscroll.preventScroll = true; // freeze scroll
 smoothscroll.preventScroll = false; // let it free
 ```
+
+
+## TODO
+- [x] ScrollTo method
+- [x] destroy method
+- [ ] init method to defered initialization
+- [ ] horizontal scroll support
+- [ ] add a scroll bar
