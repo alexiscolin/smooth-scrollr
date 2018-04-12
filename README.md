@@ -72,6 +72,9 @@ smoothscroll.preventScroll = true; // freeze scroll
 smoothscroll.preventScroll = false; // let it free
 ```
 
+## ENJOY !
+![enjoy](https://media.giphy.com/media/qyCDVJBPdBET6/giphy.gif)
+
 
 ## TODO
 - [x] ScrollTo method
