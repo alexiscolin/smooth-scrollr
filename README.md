@@ -79,3 +79,6 @@ smoothscroll.preventScroll = false; // let it free
 - [ ] init method to defered initialization
 - [ ] horizontal scroll support
 - [ ] add a scroll bar
+
+## Licence
+MIT Licence -> [see here](https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE)
