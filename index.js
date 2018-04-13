@@ -147,7 +147,7 @@ _preload = function(){
   const medias = [...this.DOM.scroller.querySelectorAll('img, video')];
   if(medias.length <= 0) return;
 
-  const isPromise = !window.Promise ? true : false;
+  const isPromise = window.Promise ? true : false;
   const loading = isPromise ? [] : null;
 
   const getSize = () => {
@@ -162,7 +162,7 @@ _preload = function(){
     if(isPromise){
       const loader = new Promise((resolve, error) => {
         el.addEventListener(eventType, () => {
-          resolve(null);
+          resolve();
         }, false);
       });
       loading.push(loader);
