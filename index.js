@@ -140,6 +140,48 @@ SmoothScroll.prototype = function(){
   },
 
 
+/**
+/*  PRELOAD - preload medias on the page -> get real height  */
+/* */
+_preload = function(){
+  const medias = [...this.DOM.scroller.querySelectorAll('img, video')];
+  if(medias.length <= 0) return;
+
+  const isPromise = !window.Promise ? true : false;
+  const loading = isPromise ? [] : null;
+
+  const getSize = () => {
+    this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
+  };
+
+  medias.forEach((media, key, array) => {
+
+    const eventType = media.nodeName.toLowerCase() === 'img' ? 'load' : 'loadstart';
+    const el = document.createElement(media.nodeName.toLowerCase());
+
+    if(isPromise){
+      const loader = new Promise((resolve, error) => {
+        el.addEventListener(eventType, () => {
+          resolve(null);
+        }, false);
+      });
+      loading.push(loader);
+
+    }else{
+      el.onloadstart = el.onload = () => {
+        array.splice(array.indexOf(media), 1);
+        array.length === 0 && getSize();
+      };
+    }
+
+    el.src = media.src;
+
+  });
+
+  isPromise && Promise.all(loading).then( values => { getSize() });
+},
+
+
   /**
   /*  FIXED-VIEWPORT - block the viewport for smoothscroll with class or inline style */
   /* */
@@ -201,6 +243,9 @@ SmoothScroll.prototype = function(){
       touchY: 0
     };
 
+    // preload medias
+    _preload.call(this);
+
     // detect if the browser is Firefox
     this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
 
@@ -213,12 +258,6 @@ SmoothScroll.prototype = function(){
 
     //bind events
     bindEvent.call(this);
-
-    // calc max height
-    this.config.scrollMax = 0;
-    window.addEventListener('load', ()=>{
-      this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
-    });   
   },
 
 
@@ -241,8 +280,8 @@ SmoothScroll.prototype = function(){
       this.rAF = null;
     }
   },
-	
-	
+
+
   /**
   /*  SCROLL-TO - scroll to given location */
   /* */
@@ -259,8 +298,8 @@ SmoothScroll.prototype = function(){
   resize = function(){
     this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
   };
-	
-	
+
+
   /**
   /*  DESTROY - destroy content */
   /* */
