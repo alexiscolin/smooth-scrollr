@@ -145,7 +145,10 @@ SmoothScroll.prototype = function(){
 /* */
 _preload = function(){
   const medias = [...this.DOM.scroller.querySelectorAll('img, video')];
-  if(medias.length <= 0) return;
+  if(medias.length <= 0){
+    this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
+    return;
+  }
 
   const isPromise = window.Promise ? true : false;
   const loading = isPromise ? [] : null;
