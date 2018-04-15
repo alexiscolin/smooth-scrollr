@@ -30,7 +30,7 @@ const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 ### Notes about tools
 * ES6
 * Prototype reveal pattern
-* Preload media (images, video) system
+* Preload media (images, video) system 
 
 ## Options and Settings
 **parallax** - Boolean (optional | default: false) enable parallax on scroll from parallax module;
