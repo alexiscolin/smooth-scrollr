@@ -148,7 +148,7 @@ _preload = function(){
   if(medias.length <= 0){
     this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
     return;
-  }
+  } 
 
   const isPromise = window.Promise ? true : false;
   const loading = isPromise ? [] : null;
