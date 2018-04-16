@@ -25,12 +25,15 @@ const opts = {
 };
 
 const smoothscroll = new SmoothScroll(opts, 'fixedClass');
+
+smoothscroll.start(); // run run run!
+
 ```
 
 ### Notes about tools
 * ES6
 * Prototype reveal pattern
-* Preload media (images, video) system 
+* Preload media (images, video) system
 
 ## Options and Settings
 **parallax** - Boolean (optional | default: false) enable parallax on scroll from parallax module;
@@ -49,6 +52,15 @@ const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 
 
 ## Methods
+
+#### ```start```
+In order to enable smoothscroll on the page. This method is **required at first**. At that point all the function parameters are loaded and are waiting for starting before running scroll animation. So you have to start smoothscroll after requesting for a new instance to allow user scrolling on the page.
+You can also use this method after setting `preventScroll` to `true` if you want to unfreeze the scroll.
+
+```javascript
+smoothscroll.start(); // run smoothscroll
+```
+
 #### ```bindEvent```
 In order to bind scrolling events to the DOM and start a requestAnimationFrame (auto in new instance, use it after an unbind method)
 
