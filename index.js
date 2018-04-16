@@ -94,18 +94,16 @@ SmoothScroll.prototype = function(){
     // calc new value of scroll if there was a scroll
     if(this.move.prevY !== this.move.destY){
 
-      if(!this.prevent){
+      if(this.prevent) return; // don't run if unnecessary
 
-        this.move.currentY += (this.move.destY - this.move.currentY) * this.config.delay;
+      this.move.currentY += (this.move.destY - this.move.currentY) * this.config.delay;
 
-        // update scroll && parallax positions
-        const moveTo = -this.move.currentY.toFixed(2);
-        this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(0,${moveTo}px, 0)`;
-        this.prlxItems && this.prlxItems.update(moveTo);
+      // update scroll && parallax positions
+      const moveTo = -this.move.currentY.toFixed(2);
+      this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(0,${moveTo}px, 0)`;
+      this.prlxItems && this.prlxItems.update(moveTo);
 
-        this.move.prevY = Math.round(this.move.currentY);
-
-      }
+      this.move.prevY = Math.round(this.move.currentY);
 
     }else{
       this.config.ticking = false;
