@@ -89,18 +89,24 @@ SmoothScroll.prototype = function(){
     this.rAF = requestAnimationFrame(_update.bind(this));
 
     // get scroll Level inside body size
-    this.move.destY = Math.round(Math.max(0, Math.min(this.move.destY, this.config.scrollMax)));
+    this.move.destY = this.prevent || Math.round(Math.max(0, Math.min(this.move.destY, this.config.scrollMax)));
 
     // calc new value of scroll if there was a scroll
     if(this.move.prevY !== this.move.destY){
-      this.move.currentY += (this.move.destY - this.move.currentY) * this.config.delay;
 
-      // update scroll && parallax positions
-      const moveTo = -this.move.currentY.toFixed(2);
-      this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(0,${moveTo}px, 0)`;
-      this.prlxItems && this.prlxItems.update(moveTo);
+      if(!this.prevent){
 
-      this.move.prevY = Math.round(this.move.currentY);
+        this.move.currentY += (this.move.destY - this.move.currentY) * this.config.delay;
+
+        // update scroll && parallax positions
+        const moveTo = -this.move.currentY.toFixed(2);
+        this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(0,${moveTo}px, 0)`;
+        this.prlxItems && this.prlxItems.update(moveTo);
+
+        this.move.prevY = Math.round(this.move.currentY);
+
+      }
+
     }else{
       this.config.ticking = false;
       cancelAnimationFrame(this.rAF);
@@ -148,7 +154,7 @@ _preload = function(){
   if(medias.length <= 0){
     this.config.scrollMax = this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight);
     return;
-  } 
+  }
 
   const isPromise = window.Promise ? true : false;
   const loading = isPromise ? [] : null;
