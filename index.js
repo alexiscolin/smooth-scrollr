@@ -271,6 +271,14 @@ _preload = function(){
 
 
   /**
+  /*  START - run smoothscroll */
+  /* */
+  start = function(){
+    this.prevent = false;
+  },
+
+
+  /**
   /*  BIND-EVENT - bind events to the DOM && start rAF */
   /* */
   bindEvent = function(){
@@ -331,6 +339,7 @@ _preload = function(){
 
   return {
     init,
+    start,
     resize,
     bindEvent,
     unbindEvent,
