@@ -16,12 +16,15 @@ or npm:
 import { SmoothScroll } from 'smooth-scrollr';
 
 const opts = {
-  parallax: true,
+  section: document.querySelector('#section'),
+  direction: 'vertical',
+  parallax: false,
   touch: false,
   delay: .1,
   speed: .8,
   touchSpeed: 2,
   jump: 120,
+  preload: false
 };
 
 const smoothscroll = new SmoothScroll(opts, 'fixedClass');
@@ -36,6 +39,10 @@ smoothscroll.start(); // run run run!
 * Preload media (images, video) system
 
 ## Options and Settings
+**section** - NodeType (optional | default: body) DOM section that you want to make scrollable;
+
+**direction** - String (optional | 'vertical' || 'horizontal' | default: 'vertical') scroll direction;
+
 **parallax** - Boolean (optional | default: false) enable parallax on scroll from parallax module;
 
 **touch** - Boolean (optional | default: false) enable smooth scroll on touch event;
@@ -50,6 +57,7 @@ smoothscroll.start(); // run run run!
 
 **fixedClass** - String (optional) the class you want to set in order to fix the viewport (at least you need `overflow: hidden` and `height: 100vh`). If the smooth scrolling is activated on the device and there are not fixedClass defined, some inline style will be used.
 
+**preload** - Boolean (optional | default true) enable preload media function in order to resize page after async;
 
 ## Methods
 
