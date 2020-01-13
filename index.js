@@ -216,7 +216,7 @@ SmoothScroll.prototype = function () {
   const init = function (config, viewPortclass) {
 
       // DOM elements
-      this.DOM.scroller = config.section;
+      this.DOM.scroller = config.section || document.body;
       this.DOM.container = this.DOM.scroller.parentNode;
 
       // configurations
