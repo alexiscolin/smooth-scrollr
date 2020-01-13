@@ -57,7 +57,9 @@ smoothscroll.start(); // run run run!
 
 **fixedClass** - String (optional) the class you want to set in order to fix the viewport (at least you need `overflow: hidden` and `height: 100vh`). If the smooth scrolling is activated on the device and there are not fixedClass defined, some inline style will be used.
 
-**preload** - Boolean (optional | default true) enable preload media function in order to resize page after async;
+**preload** - Boolean (optional | default true) enable preload media function in order to resize page after async
+
+**resize** - Boolean (optional | default true) enable auto resize
 
 ## Methods
 
@@ -78,6 +80,8 @@ In order to unbind scrolling events to the DOM and cancel the requestAnimationFr
 #### ```destroy```
 In order to destroy smooth-scroll class instance and all its properties.
 
+#### ```resize```
+In order to recalculate scroll container size
 
 #### ```scrollTo```
 In order to force scroll to a location on the webpage. This method has two parameters, the first one is for the location on the page (in px) and the second one is used to tell the method if you want a smooth scroll or an imediate position rendering (true/false).
