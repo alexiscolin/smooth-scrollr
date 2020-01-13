@@ -105,7 +105,7 @@ smoothscroll.preventScroll = false; // let it free
 - [x] ScrollTo method
 - [x] destroy method
 - [ ] init method to defered initialization
-- [ ] horizontal scroll support
+- [x] horizontal scroll support
 - [ ] add a scroll bar
 
 ## Licence
