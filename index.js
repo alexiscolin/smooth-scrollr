@@ -6,6 +6,7 @@
 /*==============================*/
 
 var SmoothScroll = function (config = {}, viewPortclass = null) {
+    this.name = 'scroll';
     this.DOM = {};
     this.config = {};
     this.move = {};
@@ -29,22 +30,22 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     const _onWheel = function (e) {
         //   e.preventDefault(); //need it here ?
         const dir = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        this.move.destY += (this.runFirefox && e.deltaMode == 1) ? dir * this.config.speed * this.config.multFirefox : dir * this.config.speed;
+        this.move.dest += (this.runFirefox && e.deltaMode == 1) ? dir * this.config.speed * this.config.multFirefox : dir * this.config.speed;
   
         _requestTick.call(this); // start animation
     };
   
     const _onTouchStart = function (e) {
         const t = (e.targetTouches) ? e.targetTouches[0] : e;
-        this.move.touchY = t.pageY;
+        this.move.touch = t.pageY;
     };
   
     const _onTouchMove = function (e) {
         e.preventDefault();
         const t = (e.targetTouches) ? e.targetTouches[0] : e;
   
-        this.move.destY += (t.pageY - this.move.touchY) * this.config.touchSpeed; //mouvement
-        this.move.touchY = t.pageY; // update touch
+        this.move.dest += (t.pageY - this.move.touch) * this.config.touchSpeed; //mouvement
+        this.move.touch = t.pageY; // update touch
   
         _requestTick.call(this); // start animation
     };
@@ -53,13 +54,13 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         if (e.keyCode === 38 || e.keyCode === 40) e.preventDefault();
   
         // if downKey is pressed, then jump + else if upKey is pressed, then jump - else 0
-        this.move.destY += e.keyCode === 38 ? -this.config.jump : (e.keyCode === 40 ? this.config.jump : 0); // 38 up arrow && 40 down arrow
+        this.move.dest += e.keyCode === 38 ? -this.config.jump : (e.keyCode === 40 ? this.config.jump : 0); // 38 up arrow && 40 down arrow
   
         _requestTick.call(this); // start animation
     };
   
     const _onScroll = function (e) {
-        this.move.destY = window.scrollY || window.pageYOffset;
+        this.move.dest = window.scrollY || window.pageYOffset;
         _requestTick.call(this); // start animation
     };
   
@@ -82,18 +83,32 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
   
         this.rAF = requestAnimationFrame(_update.bind(this));
         // get scroll Level inside body size
-        this.move.destY = Math.round(Math.max(0, Math.min(this.move.destY, this.config.scrollMax)));
+        this.move.dest = Math.round(Math.max(0, Math.min(this.move.dest, this.config.scrollMax)));
   
         // calc new value of scroll if there was a scroll
-        if (this.move.prevY !== this.move.destY) {
-            this.move.currentY += (this.move.destY - this.move.currentY) * this.config.delay;
+        if (this.move.prev !== this.move.dest) {
+            this.move.current += (this.move.dest - this.move.current) * this.config.delay;
   
             // update scroll && parallax positions
-            const moveTo = -this.move.currentY.toFixed(2);
-            this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
+            const moveTo = -this.move.current.toFixed(2);
+
+            // iterate over section and update translate and visibility
+            for (let i = this.sections.length - 1; i >= 0; i--) {
+
+                // check if section should move (inView)
+                if (this.move.current > this.sections[i].offset && this.move.current < this.sections[i].limit) {
+                    this.sections[i].el.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
+                    !this.sections[i].isInView && (this.sections[i].el.style.visibility = 'visible');
+                    this.sections[i].isInView = true;
+                } else {
+                    this.sections[i].isInView && (this.sections[i].el.style.visibility = 'hidden');
+                    this.sections[i].isInView = false;
+                }
+            }
+            // this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
             this.prlxItems && this.prlxItems.update(moveTo);
   
-            this.move.prevY = Math.round(this.move.currentY);
+            this.move.prev = Math.round(this.move.current);
         } else {
             this.config.ticking = false;
             cancelAnimationFrame(this.rAF);
@@ -195,8 +210,45 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         }
         return true;
     },
-  
-  
+
+
+    /**
+    /*  ADD-SECTION - Create info and observer for section on the page  */
+    /* */
+    _addSection = function () {
+        this.sections = [];
+
+        let sections = this.DOM.scroller.querySelectorAll(`[data-${this.name}-section]`);
+        if (sections.length === 0) {
+           sections = this.DOM.scroller;
+        }
+
+        //create observer and info for each section
+        [...sections].forEach(section => {
+            const sectionData = {};
+            sectionData.isInView = false;
+            sectionData.el = section;
+            sectionData.sibbling = false;
+            sectionData.boundrect = sectionData.el.getBoundingClientRect()
+
+            // set section disposition
+            if (this.config.direction === "vertical") {
+                sectionData.offset = sectionData.boundrect.top - (window.innerHeight * 1.5) - _getTranslate(sectionData.el).y;
+                sectionData.limit = sectionData.offset + sectionData.boundrect.height + (window.innerHeight * 2);
+            } else {
+                sectionData.offset = sectionData.boundrect.left - (window.innerWidth * 1.5) - _getTranslate(sectionData.el).x;
+                sectionData.limit = sectionData.offset + sectionData.boundrect.width + (window.innerWidth * 2);
+            }
+
+            // add section info
+            this.sections.push(sectionData)
+        })
+
+        //generate section order -> in order of apparition
+        this.sections.sort((a, b) => this.config.direction === 'vertical' ? a.boundrect.top - b.boundrect.top : a.boundrect.left - b.boundrect.left);
+    },
+
+
     /**
     /*  DEVICE-DETECT-EVENT - get events browsers compatibility  */
     /* */
@@ -207,7 +259,30 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
             touch: 'ontouchstart' in document,
             keys: 'onkeydown' in document
         }
-    };
+    }, 
+
+
+    /**
+    /*  GET-TRANSLATE - get translation style utility  */
+    /* */
+    _getTranslate = function (el) {
+        const translate = {}
+        if(!window.getComputedStyle) return;
+    
+        const style = getComputedStyle(el);
+        const transform = style.transform || style.webkitTransform || style.mozTransform;
+    
+        let mat = transform.match(/^matrix3d\((.+)\)$/);
+        if(mat) return parseFloat(mat[1].split(', ')[13]);
+    
+        mat = transform.match(/^matrix\((.+)\)$/);
+        translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
+        translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
+    
+        return translate;
+    }
+
+    
   
   
     /**********************
@@ -239,10 +314,10 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
   
         // movement refresh variables
         this.move = {
-            currentY: 0,
-            destY: 0,
-            prevY: 0,
-            touchY: 0
+            current: 0,
+            dest: 0,
+            prev: 0,
+            touch: 0
         };
   
         // preload medias
@@ -250,6 +325,8 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
   
         // set scroll module size
         resize.call(this);
+
+        // _addSection.call(this);
   
         // detect if the browser is Firefox
         this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
@@ -291,7 +368,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  SCROLL-TO - scroll to given location */
     /* */
     scrollTo = function (dir, immediate = false) {
-        this.move.destY = dir;
+        this.move.dest = dir;
         immediate || (_requestTick.call(this)); // start animation
         immediate && (this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
     },
@@ -301,6 +378,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  RESIZE - recalc vars after a resize */
     /* */
     resize = function () {
+        _addSection.call(this);
         this.config.scrollMax = this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth));
     },
   
