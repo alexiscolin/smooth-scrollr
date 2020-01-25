@@ -226,9 +226,9 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         //create observer and info for each section
         [...sections].forEach(section => {
             const sectionData = {};
+            
             sectionData.isInView = false;
             sectionData.el = section;
-            sectionData.sibbling = false;
             sectionData.boundrect = sectionData.el.getBoundingClientRect()
 
             // set section disposition
