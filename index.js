@@ -10,7 +10,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     this.DOM = {};
     this.config = {};
     this.move = {};
-    this.prlxItems = [];
+    this.callback = false;
   
     this.init(config, viewPortclass);
   };
@@ -106,7 +106,9 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
                 }
             }
             // this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
-            this.prlxItems && this.prlxItems.update(moveTo);
+            if (typeof this.callback === "function") {
+                this.callback(moveTo, this.move.prev)
+            }
   
             this.move.prev = Math.round(this.move.current);
         } else {
@@ -302,7 +304,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
             speed: config.speed || 1,
             touchSpeed: config.touchSpeed || 1.5,
             jump: config.jump || 110,
-            parallax: config.parallax || false,
+            callback: config.callback || false,
             touch: config.touch || false,
             fixedClass: viewPortclass || false,
             resize: config.resize || true,
@@ -336,7 +338,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         this.enableSmoothScroll = !this.deviceHasEvents.touch || this.config.touch;
   
         // if parallax, get elements to move
-        this.prlxItems = this.config.parallax ? new Parallax() : null;
+        this.callback = this.config.callback;
   
         //bind events
         bindEvent.call(this);
@@ -387,10 +389,10 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  DESTROY - destroy content */
     /* */
     destroy = function () {
-        if (this.prlx) {
-            this.prlx = this.prlx.destroy();
-            delete this.prlx;
-        }
+        // if (this.prlx) {
+        //     this.prlx = this.prlx.destroy();
+        //     delete this.prlx;
+        // }
   
         this.unbindEvent.call(this);
   
