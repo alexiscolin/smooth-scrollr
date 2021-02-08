@@ -32,13 +32,18 @@ module.exports = {
     compress: true,
     open: true,
     stats: "errors-only",
-    port: 9900
+    port: 9900,
+    openPage: ['/horizontal.html','/vertical.html'],
   },
 
   plugins: [
     new HtmlWebPackPlugin({
       template: path.resolve(__dirname,"../demos/vertical.html"),
-      filename: "index.html"
-    })
+      filename: "vertical.html"
+    }),
+    new HtmlWebPackPlugin({
+      template: path.resolve(__dirname,"../demos/horizontal.html"),
+      filename: `horizontal.html`
+   })
   ]
 }

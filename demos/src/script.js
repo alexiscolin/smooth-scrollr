@@ -6,6 +6,6 @@ import {SmoothScroll} from '../../src/index.js';
     const opts = {
     };
 
-    const smoothscroll = new SmoothScroll(opts);
+    // const smoothscroll = new SmoothScroll(opts);
 
 })()
