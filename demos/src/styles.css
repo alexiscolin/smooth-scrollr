@@ -1,0 +1,25 @@
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    position: relative;
+    width: 100%;
+}
+.container {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.container_item {
+    width: 80vw;
+    height: 60vh;
+    background: lightgray;
+    margin: 2vw 0;
+    border-radius: 20px;
+}

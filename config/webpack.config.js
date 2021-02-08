@@ -2,7 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: path.resolve(__dirname, '../src/index.js'),
     module: {
         rules: [
             {
@@ -22,6 +22,6 @@ module.exports = {
     ],
     output: {
         filename: 'smooth-scrollr.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, '../dist'),
     },
 };
