@@ -3,6 +3,9 @@
   "version": "0.4.0",
   "description": "🖱Simple smooth scrolling in JS",
   "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode=production"
+  },
   "repository": {
     "url": "https://github.com/alexiscolin/smooth-scrollr.git",
     "type": "git"
@@ -15,5 +18,13 @@
     "parallax"
   ],
   "author": "Alexis Colin",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.12.13",
+    "@babel/preset-env": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "webpack": "^5.21.2",
+    "webpack-cli": "^4.5.0"
+  }
 }
