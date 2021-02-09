@@ -10,7 +10,8 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     this.DOM = {};
     this.config = {};
     this.move = {};
-    this.callback = false;
+    this.callback = [];
+    this.scrollStatut = 'start';
   
     this.init(config, viewPortclass);
   };
@@ -37,15 +38,25 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
   
     const _onTouchStart = function (e) {
         const t = (e.targetTouches) ? e.targetTouches[0] : e;
-        this.move.touch = t.pageY;
+        this.move.touch = {
+            pageY:  t.pageY,
+            pageX: t.pageX
+        };
     };
   
     const _onTouchMove = function (e) {
-        e.preventDefault();
         const t = (e.targetTouches) ? e.targetTouches[0] : e;
-  
-        this.move.dest += (t.pageY - this.move.touch) * this.config.touchSpeed; //mouvement
-        this.move.touch = t.pageY; // update touch
+        const moveY = t.pageY;
+        const moveX = t.pageX;
+        const dir = Math.abs(t.pageY - this.move.touch.pageY) > Math.abs(t.pageX - this.move.touch.pageX) ? 'pageY' : 'pageX';
+        const move = (dir === "pageY" ? moveY : moveX);
+
+        this.move.dest += -(move -  this.move.touch[dir]) * this.config.touchSpeed; //mouvement
+
+        this.move.touch = {
+            pageY: moveY,
+            pageX: moveX
+        }; // update touch
   
         _requestTick.call(this); // start animation
     };
@@ -80,11 +91,25 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  UPDATE - run animation in requestAnimationFrame  */
     /* */
     _update = function () {
-  
+        cancelAnimationFrame(this.rAF);
         this.rAF = requestAnimationFrame(_update.bind(this));
+        
+        // scroll action in function of scroll position (statut) -> a passer en fonction de callback ?
+        if(this.move.dest >= this.config.scrollMax && this.scrollStatut !== 'end'){
+            // this.config.scrollFuncs.endFunc(); --> ajouter un event
+            this.scrollStatut = 'end';
+        } else if(this.move.dest <= 0 && this.scrollStatut !== 'start') {
+            // this.config.scrollFuncs.startFunc(); // ajouter un event
+            this.scrollStatut = 'start';
+
+        } else if (this.move.dest > 0 && this.move.dest < this.config.scrollMax && this.scrollStatut !== 'running') {
+            // this.config.scrollFuncs.runningFunc(); --> ajouter un event - diff avec callback général ?
+            this.scrollStatut = 'running';
+        }
+
         // get scroll Level inside body size
         this.move.dest = Math.round(Math.max(0, Math.min(this.move.dest, this.config.scrollMax)));
-  
+        
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
             this.move.current += (this.move.dest - this.move.current) * this.config.delay;
@@ -106,8 +131,8 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
                 }
             }
             // this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
-            if (typeof this.callback === "function") {
-                this.callback(moveTo, this.move.prev)
+            if (this.callback.length > 0) {
+                this.callback.forEach(fn => typeof fn === "function" && (fn(moveTo, this.move.prev, this.config.scrollMax)));
             }
   
             this.move.prev = Math.round(this.move.current);
@@ -161,40 +186,78 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  PRELOAD - preload medias on the page -> get real height  */
     /* */
     _preload = function () {
-        const medias = [...this.DOM.scroller.querySelectorAll('img, video')];
+        const medias = [...this.DOM.scroller.querySelectorAll('img[src], video')];
         if (medias.length <= 0) return;
   
         const isPromise = window.Promise ? true : false;
+        const isFetch = window.fetch ? true : false;
         const loading = isPromise ? [] : null;
   
+        // funcs
         const getSize = () => {
             this.config.scrollMax = this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth));
         };
+        const promiseCallback = () => {
+            getSize() 
+            this.resize();
+
+            // start all function called in initFunc array
+            if(this.config.initFuncs.length > 0) {
+                this.config.initFuncs.forEach(fn => fn());
+            }
+        }
   
+        // Loader
         medias.forEach((media, key, array) => {
   
             const eventType = media.nodeName.toLowerCase() === 'img' ? 'load' : 'loadstart';
             const el = document.createElement(media.nodeName.toLowerCase());
-  
+
             if (isPromise) {
-                const loader = new Promise((resolve, error) => {
-                    el.addEventListener(eventType, () => {
-                        resolve();
-                    }, false);
-                });
+                let loader = null;
+                if (isFetch) {
+                    // If fetch available (no 400 error may be throwned - fetch only allow network error rejection)
+                    loader = fetch(media.src)
+                        .then(response => {
+                            if (!response.ok) {
+                                // make the promise be rejected if we didn't get a 2xx response
+                                this.config.preloadFuncs.error(response);
+                                throw new Error(response.url + " Is not a 2xx response")
+                            } else {
+                                 return response
+                            }
+                        })
+                        .catch(error => console.error('Fetch error: ' + error.message))
+                } else {
+                    // If at least one media is not available, an error is throwned -> initFuncs will not work art all 
+                    loader = new Promise((resolve, reject) => {
+                        el.src = media.src;
+
+                        el.addEventListener(eventType, e => {
+                                return resolve();
+                        }, false);
+                        el.addEventListener("error", e => {
+                            this.config.preloadFuncs.error();
+                            return reject(new Error("Media failed loading"));
+                        }, false);
+                    });
+                }
                 loading.push(loader);
   
             } else {
+                // OLD way - No error message here (should add a timeout here for legacy)
                 el.onloadstart = el.onload = () => {
                     array.splice(array.indexOf(media), 1);
-                    array.length === 0 && getSize();
+                    array.length === 0 && promiseCallback();
                 };
             }
-  
-            el.src = media.src;
         });
-  
-        isPromise && Promise.all(loading).then(values => { getSize() });
+        
+        isPromise && Promise.all(loading).then(values => { 
+            promiseCallback()
+        }).catch(error => {
+            console.error(error.message)
+        })
     },
   
   
@@ -209,6 +272,11 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         } else {
             this.DOM.container.style.overflow = 'hidden';
             this.DOM.container.style.height = '100vh';
+            if ('CSS' in window && CSS.supports('overscroll-behavior-y', 'none')) {
+                document.body.style.overscrollBehaviorY = 'none';
+            } else {
+                document.body.style.overflow = 'hidden';
+            }
         }
         return true;
     },
@@ -222,8 +290,9 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
 
         let sections = this.DOM.scroller.querySelectorAll(`[data-${this.name}-section]`);
         if (sections.length === 0) {
-           sections = this.DOM.scroller;
+           sections = [this.DOM.scroller];
         }
+        console.log(sections);
 
         //create observer and info for each section
         [...sections].forEach(section => {
@@ -258,7 +327,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         return {
             wheel: 'onwheel' in document,
             mouseWheel: 'onmousewheel' in document,
-            touch: 'ontouchstart' in document,
+            touch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
             keys: 'onkeydown' in document
         }
     }, 
@@ -302,16 +371,20 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
             delay: config.delay || .1,
             direction: config.direction || 'vertical',
             speed: config.speed || 1,
+            delay: config.delay || 0,
             touchSpeed: config.touchSpeed || 1.5,
             jump: config.jump || 110,
-            callback: config.callback || false,
+            callback: config.callback || [],
             touch: config.touch || false,
             fixedClass: viewPortclass || false,
             resize: config.resize || true,
             preload: config.preload || true,
             multFirefox: 15,
             scrollMax: 0,
-            ticking: false
+            ticking: false,
+            initFuncs: config.initFuncs || [],
+            scrollFuncs: config.scrollFuncs || {},
+            preloadFuncs : config.preloadFuncs || {}
         };
   
         // movement refresh variables
@@ -336,7 +409,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         // get event compatibility and allowance for scroll
         this.deviceHasEvents = _deviceDetectEvent();
         this.enableSmoothScroll = !this.deviceHasEvents.touch || this.config.touch;
-  
+
         // if parallax, get elements to move
         this.callback = this.config.callback;
   
@@ -373,6 +446,16 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         this.move.dest = dir;
         immediate || (_requestTick.call(this)); // start animation
         immediate && (this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
+    },
+
+    /**
+    /*  SCROLL-OF - scroll of given path */
+    /* */
+    scrollOf = function (path, immediate = false) {
+        this.move.dest += path;
+        immediate || (_requestTick.call(this)); // start animation
+        immediate && (this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
+        return 'true';
     },
   
   
@@ -413,6 +496,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         bindEvent,
         unbindEvent,
         scrollTo,
+        scrollOf,
         destroy
     }
   }();
