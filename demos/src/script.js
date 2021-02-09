@@ -4,20 +4,20 @@ import {SmoothScroll} from '../../src/index.js';
 (function(){
     const direction = document.body.dataset.scroll;
     const container = document.querySelector('#section');
-    console.log(direction)
+
     const opts = {
         callback: [],
         touch: true,
         delay: .1,
         direction: direction,
-        speed: .9,
+        speed: .1,
         section: container,
         touchSpeed: 2,
         jump: 120,
         preloadFuncs: {
             // 'error': this.onPreloadError.bind(this)
         },
-        initFuncs: [],
+        // initFuncs: [() => console.log('yeah')],
         scrollFuncs: {
             // 'startFunc': this.atStart.bind(this),
             // 'runningFunc': this.atRun.bind(this),

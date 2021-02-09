@@ -63,13 +63,13 @@ smoothscroll.start(); // run run run!
 
 ## Methods
 
-#### ```start```
+<!-- #### ```start```
 In order to enable smoothscroll on the page. This method is **required at first**. At that point all the function parameters are loaded and are waiting for starting before running scroll animation. So you have to start smoothscroll after requesting for a new instance to allow user scrolling on the page.
 You can also use this method after setting `preventScroll` to `true` if you want to unfreeze the scroll.
 
 ```javascript
 smoothscroll.start(); // run smoothscroll
-```
+``` -->
 
 #### ```bindEvent```
 In order to bind scrolling events to the DOM and start a requestAnimationFrame (auto in new instance, use it after an unbind method)
@@ -104,9 +104,9 @@ smoothscroll.preventScroll = false; // let it free
 ## TODO
 - [x] ScrollTo method
 - [x] destroy method
-- [ ] init method to defered initialization
 - [x] horizontal scroll support
 - [ ] add a scroll bar
+- [ ] clean Getter/Setter 
 
 ## Licence
 MIT Licence -> [see here](https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE)

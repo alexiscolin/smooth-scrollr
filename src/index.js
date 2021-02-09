@@ -1,3 +1,5 @@
+import { options } from './config';
+import { Preloader } from './preloader';
 
 /*==============================*/
 /*==============================*/
@@ -14,10 +16,10 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     this.scrollStatut = 'start';
   
     this.init(config, viewPortclass);
-  };
+};
   
   
-  SmoothScroll.prototype = function () {
+SmoothScroll.prototype = function () {
   
     /***********************
      ****** PRIVATES ******
@@ -109,7 +111,6 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
 
         // get scroll Level inside body size
         this.move.dest = Math.round(Math.max(0, Math.min(this.move.dest, this.config.scrollMax)));
-        console.log(this.config.scrollMax)
 
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
@@ -117,7 +118,6 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
   
             // update scroll && parallax positions
             const moveTo = -this.move.current.toFixed(2);
-            console.log(moveTo)
 
             // iterate over section and update translate and visibility
             for (let i = this.sections.length - 1; i >= 0; i--) {
@@ -183,89 +183,84 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         }
     },
 
-    _getSize = function () {
-        console.log((this.DOM.scroller))
-        return this.config.scrollMax = this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth));
-    },
+    
   
   
     /**
     /*  PRELOAD - preload medias on the page -> get real height  */
     /* */
-    _preload = function () {
-        console.log('preload')
-        const medias = [...this.DOM.scroller.querySelectorAll('img[src], video')];
-        if (medias.length <= 0) return;
+    // _preload = function () {
+    //     const medias = [...this.DOM.scroller.querySelectorAll('img[src], video')];
+    //     if (medias.length <= 0) return;
   
-        const isPromise = window.Promise ? true : false;
-        const isFetch = window.fetch ? true : false;
-        const loading = isPromise ? [] : null;
+    //     const isPromise = window.Promise ? true : false;
+    //     const isFetch = window.fetch ? true : false;
+    //     const loading = isPromise ? [] : null;
   
-        // funcs
+    //     // funcs
         
-        const promiseCallback = () => {
-            console.log('promise')
-            _getSize();
-            this.resize();
+    //     const promiseCallback = () => {
+    //         // _getSize();
+    //         this.resize();
 
-            // start all function called in initFunc array
-            if(this.config.initFuncs.length > 0) {
-                this.config.initFuncs.forEach(fn => fn());
-            }
-        }
+    //         // start all function called in initFunc array
+    //         if(this.config.initFuncs.length > 0) {
+    //             this.config.initFuncs.forEach(fn => fn());
+    //         }
+    //     }
   
-        // Loader
-        medias.forEach((media, key, array) => {
+    //     // Loader
+    //     medias.forEach((media, key, array) => {
   
-            const eventType = media.nodeName.toLowerCase() === 'img' ? 'load' : 'loadstart';
-            const el = document.createElement(media.nodeName.toLowerCase());
+    //         const eventType = media.nodeName.toLowerCase() === 'img' ? 'load' : 'loadstart';
+    //         const el = document.createElement(media.nodeName.toLowerCase());
 
-            if (isPromise) {
-                let loader = null;
-                if (isFetch) {
-                    // If fetch available (no 400 error may be throwned - fetch only allow network error rejection)
-                    loader = fetch(media.src)
-                        .then(response => {
-                            if (!response.ok) {
-                                // make the promise be rejected if we didn't get a 2xx response
-                                this.config.preloadFuncs.error(response);
-                                throw new Error(response.url + " Is not a 2xx response")
-                            } else {
-                                 return response
-                            }
-                        })
-                        .catch(error => console.error('Fetch error: ' + error.message))
-                } else {
-                    // If at least one media is not available, an error is throwned -> initFuncs will not work art all 
-                    loader = new Promise((resolve, reject) => {
-                        el.src = media.src;
+    //         if (isPromise) {
+    //             let loader = null;
+    //             if (isFetch) {
+    //                 // If fetch available (no 400 error may be throwned - fetch only allow network error rejection)
+    //                 loader = fetch(media.src)
+    //                     .then(response => {
+    //                         if (!response.ok) {
+    //                             // make the promise be rejected if we didn't get a 2xx response
+    //                             this.config.preloadFuncs.error(response);
+    //                             throw new Error(response.url + " Is not a 2xx response")
+    //                         } else {
+    //                              return response
+    //                         }
+    //                     })
+    //                     .catch(error => console.error('Fetch error: ' + error.message))
+    //             } else {
+    //                 // If at least one media is not available, an error is throwned -> initFuncs will not work art all 
+    //                 loader = new Promise((resolve, reject) => {
+    //                     el.src = media.src;
 
-                        el.addEventListener(eventType, e => {
-                                return resolve();
-                        }, false);
-                        el.addEventListener("error", e => {
-                            this.config.preloadFuncs.error();
-                            return reject(new Error("Media failed loading"));
-                        }, false);
-                    });
-                }
-                loading.push(loader);
+    //                     el.addEventListener(eventType, e => {
+    //                             return resolve();
+    //                     }, false);
+    //                     el.addEventListener("error", e => {
+    //                         this.config.preloadFuncs.error();
+    //                         return reject(new Error("Media failed loading"));
+    //                     }, false);
+    //                 });
+    //             }
+    //             loading.push(loader);
   
-            } else {
-                // OLD way - No error message here (should add a timeout here for legacy)
-                el.onloadstart = el.onload = () => {
-                    array.splice(array.indexOf(media), 1);
-                    array.length === 0 && promiseCallback();
-                };
-            }
-        });
+    //         } else {
+    //             // OLD way - No error message here (should add a timeout here for legacy)
+    //             el.onloadstart = el.onload = () => {
+    //                 array.splice(array.indexOf(media), 1);
+    //                 array.length === 0 && promiseCallback();
+    //             };
+    //         }
+    //     });
         
-        isPromise && Promise.all(loading).then(values => { 
-            promiseCallback()
-        }).catch(error => {
-            console.error(error.message)
-        })
-    },
+    //     isPromise && Promise.all(loading).then(values => { 
+    //         promiseCallback()
+    //     }).catch(error => {
+    //         console.error(error.message)
+    //     })
+    // },
   
   
     /**
@@ -299,7 +294,6 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         if (sections.length === 0) {
            sections = [this.DOM.scroller];
         }
-        console.log(sections);
 
         //create observer and info for each section
         [...sections].forEach(section => {
@@ -368,33 +362,15 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
      *********************/
   
     const init = function (config, viewPortclass) {
-  
-        // DOM elements
+        /** VARIABLES  **/
+        // config init
+        Object.assign(this.config, options, config);
+        
+        // DOM elements init
         this.DOM.scroller = config.section;
         this.DOM.container = this.DOM.scroller.parentNode;
-  
-        // configurations
-        this.config = {
-            delay: config.delay || .1,
-            direction: config.direction || 'vertical',
-            speed: config.speed || 1,
-            delay: config.delay || 0,
-            touchSpeed: config.touchSpeed || 1.5,
-            jump: config.jump || 110,
-            callback: config.callback || [],
-            touch: config.touch || false,
-            fixedClass: viewPortclass || false,
-            resize: config.resize || true,
-            preload: config.preload || true,
-            multFirefox: 15,
-            scrollMax: 0,
-            ticking: false,
-            initFuncs: config.initFuncs || [],
-            scrollFuncs: config.scrollFuncs || {},
-            preloadFuncs : config.preloadFuncs || {}
-        };
-  
-        // movement refresh variables
+        
+        // movement refresh variables init
         this.move = {
             current: 0,
             dest: 0,
@@ -402,13 +378,12 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
             touch: 0
         };
   
+        /** FUNCS **/
         // preload medias
-        this.config.preload && _preload.call(this);
-  
+        this.config.preload && new Preloader(this.DOM.scroller, [success => this.resize(), ...this.config.initFuncs]);
+        
         // set scroll module size
         resize.call(this);
-
-        // _addSection.call(this);
   
         // detect if the browser is Firefox
         this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
@@ -470,9 +445,8 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  RESIZE - recalc vars after a resize */
     /* */
     resize = function () {
-        console.log('resize')
         _addSection.call(this);
-        _getSize.call(this)    
+        this.config.scrollMax = this.getSize;
     },
   
   
@@ -512,6 +486,10 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
   // SETTER / GETTER
   Object.defineProperty(SmoothScroll.prototype, "preventScroll", {
     set: function (state) { this.prevent = state; }
+  });
+
+  Object.defineProperty(SmoothScroll.prototype, "getSize", {
+    get: function () { return this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))}
   });
   
   
