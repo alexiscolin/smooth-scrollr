@@ -16,6 +16,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    will-change: tranform;
 }
 .container--horizontal {
     flex-direction: row;
@@ -31,8 +32,13 @@ body {
     border-radius: 20px;
 }
 .container_item--horizontal  {
-    width: 20vw;
+    width: auto;
     height: 60vh;
     margin: 0 2vw;
     flex: none;
+    overflow: hidden;
+}
+
+.container_img {
+    object-position: center;
 }

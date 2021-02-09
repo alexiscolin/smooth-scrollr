@@ -8,9 +8,9 @@ import {SmoothScroll} from '../../src/index.js';
     const opts = {
         callback: [],
         touch: true,
-        delay: .1,
+        delay: .08,
         direction: direction,
-        speed: .1,
+        speed: .9,
         section: container,
         touchSpeed: 2,
         jump: 120,
@@ -26,5 +26,10 @@ import {SmoothScroll} from '../../src/index.js';
     };
 
     const scroll = new SmoothScroll(opts);
+    // setTimeout(_ => {
+    //     scroll.destroy()
+    //     console.log(scroll)
+    // }, 4000)
+    
 
 })()

@@ -12,6 +12,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     this.DOM = {};
     this.config = {};
     this.move = {};
+    this.sections = [];
     this.callback = [];
     this.scrollStatut = 'start';
   
@@ -182,85 +183,6 @@ SmoothScroll.prototype = function () {
             document[listener]("scroll", this._scrollFunc, false);
         }
     },
-
-    
-  
-  
-    /**
-    /*  PRELOAD - preload medias on the page -> get real height  */
-    /* */
-    // _preload = function () {
-    //     const medias = [...this.DOM.scroller.querySelectorAll('img[src], video')];
-    //     if (medias.length <= 0) return;
-  
-    //     const isPromise = window.Promise ? true : false;
-    //     const isFetch = window.fetch ? true : false;
-    //     const loading = isPromise ? [] : null;
-  
-    //     // funcs
-        
-    //     const promiseCallback = () => {
-    //         // _getSize();
-    //         this.resize();
-
-    //         // start all function called in initFunc array
-    //         if(this.config.initFuncs.length > 0) {
-    //             this.config.initFuncs.forEach(fn => fn());
-    //         }
-    //     }
-  
-    //     // Loader
-    //     medias.forEach((media, key, array) => {
-  
-    //         const eventType = media.nodeName.toLowerCase() === 'img' ? 'load' : 'loadstart';
-    //         const el = document.createElement(media.nodeName.toLowerCase());
-
-    //         if (isPromise) {
-    //             let loader = null;
-    //             if (isFetch) {
-    //                 // If fetch available (no 400 error may be throwned - fetch only allow network error rejection)
-    //                 loader = fetch(media.src)
-    //                     .then(response => {
-    //                         if (!response.ok) {
-    //                             // make the promise be rejected if we didn't get a 2xx response
-    //                             this.config.preloadFuncs.error(response);
-    //                             throw new Error(response.url + " Is not a 2xx response")
-    //                         } else {
-    //                              return response
-    //                         }
-    //                     })
-    //                     .catch(error => console.error('Fetch error: ' + error.message))
-    //             } else {
-    //                 // If at least one media is not available, an error is throwned -> initFuncs will not work art all 
-    //                 loader = new Promise((resolve, reject) => {
-    //                     el.src = media.src;
-
-    //                     el.addEventListener(eventType, e => {
-    //                             return resolve();
-    //                     }, false);
-    //                     el.addEventListener("error", e => {
-    //                         this.config.preloadFuncs.error();
-    //                         return reject(new Error("Media failed loading"));
-    //                     }, false);
-    //                 });
-    //             }
-    //             loading.push(loader);
-  
-    //         } else {
-    //             // OLD way - No error message here (should add a timeout here for legacy)
-    //             el.onloadstart = el.onload = () => {
-    //                 array.splice(array.indexOf(media), 1);
-    //                 array.length === 0 && promiseCallback();
-    //             };
-    //         }
-    //     });
-        
-    //     isPromise && Promise.all(loading).then(values => { 
-    //         promiseCallback()
-    //     }).catch(error => {
-    //         console.error(error.message)
-    //     })
-    // },
   
   
     /**
@@ -365,6 +287,7 @@ SmoothScroll.prototype = function () {
         /** VARIABLES  **/
         // config init
         Object.assign(this.config, options, config);
+        console.log(this.config)
         
         // DOM elements init
         this.DOM.scroller = config.section;
@@ -380,8 +303,9 @@ SmoothScroll.prototype = function () {
   
         /** FUNCS **/
         // preload medias
-        this.config.preload && new Preloader(this.DOM.scroller, [success => this.resize(), ...this.config.initFuncs]);
-        
+        this.preload = this.config.preload && new Preloader(this.DOM.scroller, [success => this.resize(), ...this.config.initFuncs]);
+        console.log(this.preload);
+
         // set scroll module size
         resize.call(this);
   
@@ -458,12 +382,14 @@ SmoothScroll.prototype = function () {
         //     this.prlx = this.prlx.destroy();
         //     delete this.prlx;
         // }
+
+        if(this.preload) this.preload.destroy()
   
         this.unbindEvent.call(this);
   
         for (let prop in this) {
             if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
-  
+            console.log(this[prop])
             this[prop] = null;
             delete this[prop];
         }

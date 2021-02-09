@@ -106,7 +106,9 @@ smoothscroll.preventScroll = false; // let it free
 - [x] destroy method
 - [x] horizontal scroll support
 - [ ] add a scroll bar
-- [ ] clean Getter/Setter 
+- [ ] clean Getter/Setter
+- [ ] clean this prototype 
+- [ ] be sure the prototype is erased on delete 
 
 ## Licence
 MIT Licence -> [see here](https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE)

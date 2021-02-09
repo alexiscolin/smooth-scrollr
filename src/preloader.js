@@ -1,5 +1,3 @@
-// import { getSize } from './utils';
-
 var Preloader = function (DOM = {}, success = [], fail = []) {
     this.name = 'preloader';
     this.DOM = {};
