@@ -272,8 +272,8 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         } else {
             this.DOM.container.style.overflow = 'hidden';
             this.DOM.container.style.height = '100vh';
-            if ('CSS' in window && CSS.supports('overscroll-behavior-y', 'none')) {
-                document.body.style.overscrollBehaviorY = 'none';
+            if ('CSS' in window && CSS.supports('overscroll-behavior', 'none')) {
+                document.body.style.overscrollBehavior = 'none';
             } else {
                 document.body.style.overflow = 'hidden';
             }
