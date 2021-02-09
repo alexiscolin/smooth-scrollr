@@ -4,6 +4,7 @@ import {SmoothScroll} from '../../src/index.js';
 (function(){
     const direction = document.body.dataset.scroll;
     const container = document.querySelector('#section');
+    console.log(direction)
     const opts = {
         callback: [],
         touch: true,

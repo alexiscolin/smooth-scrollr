@@ -19,8 +19,8 @@ body {
 }
 .container--horizontal {
     flex-direction: row;
-    justify-content: center; 
     min-height: 100vh;
+    width: auto;
 }
 
 .container_item {

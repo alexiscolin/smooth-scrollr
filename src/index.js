@@ -109,13 +109,15 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
 
         // get scroll Level inside body size
         this.move.dest = Math.round(Math.max(0, Math.min(this.move.dest, this.config.scrollMax)));
-        
+        console.log(this.config.scrollMax)
+
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
             this.move.current += (this.move.dest - this.move.current) * this.config.delay;
   
             // update scroll && parallax positions
             const moveTo = -this.move.current.toFixed(2);
+            console.log(moveTo)
 
             // iterate over section and update translate and visibility
             for (let i = this.sections.length - 1; i >= 0; i--) {
@@ -180,12 +182,18 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
             document[listener]("scroll", this._scrollFunc, false);
         }
     },
+
+    _getSize = function () {
+        console.log((this.DOM.scroller))
+        return this.config.scrollMax = this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth));
+    },
   
   
     /**
     /*  PRELOAD - preload medias on the page -> get real height  */
     /* */
     _preload = function () {
+        console.log('preload')
         const medias = [...this.DOM.scroller.querySelectorAll('img[src], video')];
         if (medias.length <= 0) return;
   
@@ -194,11 +202,10 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
         const loading = isPromise ? [] : null;
   
         // funcs
-        const getSize = () => {
-            this.config.scrollMax = this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth));
-        };
+        
         const promiseCallback = () => {
-            getSize() 
+            console.log('promise')
+            _getSize();
             this.resize();
 
             // start all function called in initFunc array
@@ -463,8 +470,9 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     /*  RESIZE - recalc vars after a resize */
     /* */
     resize = function () {
+        console.log('resize')
         _addSection.call(this);
-        this.config.scrollMax = this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth));
+        _getSize.call(this)    
     },
   
   

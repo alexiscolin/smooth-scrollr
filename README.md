@@ -41,7 +41,7 @@ smoothscroll.start(); // run run run!
 ## Options and Settings
 **section** - NodeType (optional | default: body) DOM section that you want to make scrollable;
 
-**direction** - String (optional | 'vertical' || 'horizontal' | default: 'vertical') scroll direction;
+**direction** - String (optional | 'vertical' || 'horizontal' | default: 'vertical') scroll direction; If horizontal, avoid to set container width in any value other than `auto` in order to create a container that is bigger than the viewport.
 
 **parallax** - Boolean (optional | default: false) enable parallax on scroll from parallax module;
 
