@@ -55,7 +55,7 @@ smoothscroll.start(); // run run run!
 
 **jump** - Number (optional | default 110) the scrolling step on keyPress event;
 
-**fixedClass** - String (optional) the class you want to set in order to fix the viewport (at least you need `overflow: hidden` and `height: 100vh`). If the smooth scrolling is activated on the device and there are not fixedClass defined, some inline style will be used.
+**fixedClass** - String (optional) the class you want to set in order to fix the viewport (at least you need `overflow: hidden` and `height: 100vh` on the container and `overscroll-behavior-y: none` or `overflow: hidden` on the body). If the smooth scrolling is activated on the device and there are not fixedClass defined, some inline style will be used.
 
 **preload** - Boolean (optional | default true) enable preload media function in order to resize page after async
 
