@@ -152,7 +152,3 @@ Object.defineProperty(Events.prototype, "dest", {
     set: function (dir) { this.move.dest = dir; },
     get: function () { return this.move.dest; }
 });
-
-// Object.defineProperty(Events.prototype, "enableSmoothScroll", {
-//     get: function () { return this.enableSmoothScroll; }
-// });
