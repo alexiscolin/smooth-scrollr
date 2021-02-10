@@ -14,8 +14,10 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
     this.DOM = {};
     this.config = {};
     this.move = {};
+    this.callbackslisteners = {};
+    this.bindedlisteners = {};
     this.sections = [];
-    this.callback = [];
+    // this.callback = [];
     this.scrollStatut = 'start';
   
     this.init(config, viewPortclass);
@@ -45,16 +47,22 @@ SmoothScroll.prototype = function () {
         cancelAnimationFrame(this.rAF);
         this.rAF = requestAnimationFrame(_update.bind(this));
         
-        // scroll action in function of scroll position (statut) -> a passer en fonction de callback ?
+        // scroll action in function of scroll position (statut)
         if(this.move.dest >= this.config.scrollMax && this.scrollStatut !== 'end'){
-            // this.config.scrollFuncs.endFunc(); --> ajouter un event
+            if (this.callbackslisteners.collisionEnd && this.callbackslisteners.collisionEnd.length > 0) {
+                _scrollCallback.call(this, 'collisionBottom');
+            }
             this.scrollStatut = 'end';
         } else if(this.move.dest <= 0 && this.scrollStatut !== 'start') {
-            // this.config.scrollFuncs.startFunc(); // ajouter un event
+            if (this.callbackslisteners.collisionStart && this.callbackslisteners.collisionStart.length > 0) {
+                _scrollCallback.call(this, 'collisionTop');
+            }
             this.scrollStatut = 'start';
 
         } else if (this.move.dest > 0 && this.move.dest < this.config.scrollMax && this.scrollStatut !== 'running') {
-            // this.config.scrollFuncs.runningFunc(); --> ajouter un event - diff avec callback général ?
+            if (this.callbackslisteners.collisionEnded && this.callbackslisteners.collisionEnded.length > 0) {
+                _scrollCallback.call(this, 'collisionEnded');
+            }
             this.scrollStatut = 'running';
         }
 
@@ -66,14 +74,14 @@ SmoothScroll.prototype = function () {
             this.move.current += (this.move.dest - this.move.current) * this.config.delay;
   
             // update scroll && parallax positions
-            const moveTo = -this.move.current.toFixed(2);
+            this.move.position = -this.move.current.toFixed(2);
 
             // iterate over section and update translate and visibility
             for (let i = this.sections.length - 1; i >= 0; i--) {
 
                 // check if section should move (inView)
                 if (this.move.current > this.sections[i].offset && this.move.current < this.sections[i].limit) {
-                    this.sections[i].el.style.transform = this.events.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
+                    this.sections[i].el.style.transform = this.events.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? this.move.position : 0}px,${this.config.direction === 'vertical' ? this.move.position : 0}px, 0)`;
                     !this.sections[i].isInView && (this.sections[i].el.style.visibility = 'visible');
                     this.sections[i].isInView = true;
                 } else {
@@ -82,8 +90,8 @@ SmoothScroll.prototype = function () {
                 }
             }
             // this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
-            if (this.callback.length > 0) {
-                this.callback.forEach(fn => typeof fn === "function" && (fn(moveTo, this.move.prev, this.config.scrollMax)));
+            if (this.callbackslisteners.scroll && this.callbackslisteners.scroll.length > 0) {
+                _scrollCallback.call(this);
             }
   
             this.move.prev = Math.round(this.move.current);
@@ -164,8 +172,18 @@ SmoothScroll.prototype = function () {
     /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
     /* */
     _unbindEvent = function () {
+        // remove internal events
         this.events.domEvent('unbind');
 
+        // remove external events - recursive named iife to avoid breaking foreach erasing itself loop or "deep copy perf issue" 
+        for (let [key, value] of Object.entries(this.callbackslisteners)) {
+            (function deleteVal () {
+                off.call(this, key, value[value.length - 1])
+                if(value.length > 0) deleteVal.call(this)
+            }).call(this);
+        }
+
+        // remove rAF
         if (typeof this.rAF !== 'undefined') {
             cancelAnimationFrame(this.rAF);
             this.rAF = null;
@@ -201,8 +219,6 @@ SmoothScroll.prototype = function () {
         // set scroll module size
         resize.call(this);
   
-        // if parallax, get elements to move
-        this.callback = this.config.callback;
   
         //bind events
         const eventOpt = (({touch, parallax, speed, multFirefox, touchSpeed, jump}) => ({touch, parallax, speed, multFirefox, touchSpeed, jump}))(this.config);
@@ -246,13 +262,80 @@ SmoothScroll.prototype = function () {
         _addSection.call(this);
         this.config.scrollMax = getSize.call(this);
     },
+
+    _scrollCallback = function (event = 'scroll') {
+        const scrollEvent = new Event(`on-${event}`);
+        this.DOM.scroller.dispatchEvent(scrollEvent);
+    },
+
+    _listCallbacks = function (e) {
+        // get real name
+        const eventName = e.type.replace('on-','');
+        // get the global list of dedicated event
+        const list = this.callbackslisteners[eventName];
+
+        if (!list || list.length === 0) return;
+
+        // call the right callback with dedicated arguments
+        list.forEach((callback) => {
+            if(typeof callback !== "function") return;
+            switch (eventName) {
+                case 'scroll':
+                    return callback(this.move);
+                default:
+                    return callback();
+            }
+        });
+    },
+
+    /**
+    /*  ON - public event binder */
+    /* */
+    on = function (event, cb) {
+        const events = [
+            'scroll',
+            'collisionTop',
+            'collisionBottom',
+            'collisionEnded'
+        ]
+        if (!events.includes(event)) throw "'on' function - wrong event! : got " + event;
+
+        // test if there are at least one event
+        if (!this.callbackslisteners[event]) {
+            this.callbackslisteners[event] = [];
+        }
+
+        const list = this.callbackslisteners[event];
+        list.push(cb);
+
+        // listen if related function
+        if (list.length === 1) {
+            this.bindedlisteners[event] = _listCallbacks.bind(this);
+            this.DOM.scroller.addEventListener('on-' + event, this.bindedlisteners[event], false);
+        }
+    },
+
+    /**
+    /*  OFF - remove public events */
+    /* */
+    off = function (event, cb) {
+        const list = this.callbackslisteners[event];
+        // remove event from original events listing index
+        list.forEach((el, index) => el === cb && list.splice(index,1))
+
+        // if no more event, remove the listener
+        if (list.length === 0) {
+            this.DOM.scroller.removeEventListener('on-' + event, this.bindedlisteners[event], false);
+            delete this.bindedlisteners[event];
+        }
+    },
   
   
     /**
     /*  DESTROY - destroy content */
     /* */
     destroy = function () {
-    
+
         if(this.preload) this.preload.destroy()
   
         _unbindEvent.call(this);
@@ -272,6 +355,8 @@ SmoothScroll.prototype = function () {
     return {
         init,
         getSize,
+        on,
+        off,
         resize,
         scrollTo,
         scrollOf,

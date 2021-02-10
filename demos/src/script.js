@@ -27,10 +27,20 @@ import {SmoothScroll} from '../../src/index.js';
 
     const scroll = new SmoothScroll(opts);
     console.log(scroll)
+    const test = ()=> console.log('cb');
+    const test2 = ()=> console.log('cb2');
+    // scroll.on("scroll", test);
+    // scroll.on("scroll", test2);
+    scroll.on('scroll', test2);
+    scroll.on('collisionEnd', test);
+    // scroll.on("scroll", test2);
+
     // setTimeout(_ => {
     //     scroll.destroy()
-    //     console.log(scroll)
-    // }, 4000)
+    // }, 2000)
+    // setTimeout(_ => {
+    //     scroll.on("scroll", test);
+    // }, 6000)
     
 
 })()

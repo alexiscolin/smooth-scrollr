@@ -83,6 +83,16 @@ In order to force scroll to a location on the webpage. This method has two param
 smoothscroll.scrollTo(0, true); // go to the top without smoothing
 ```
 
+## Events
+### ```init``` -> inside the opts at start (after preload)
+### ```scroll``` -> fired during scroll
+### ```collisionTop``` -> fired when the scroll is at top of the page
+### ```collisionBottom``` -> fired when the scroll is at bottom of the page
+### ```collisionEnded``` -> fired once when the scroll stop to be blocked by the collision with page edges.
+
+
+
+
 ## Properties
 #### ```preventScroll``` - setter
 In order to freeze scrolling movement. Change this property by setting it to true/false.
