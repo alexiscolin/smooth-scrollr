@@ -283,11 +283,6 @@ SmoothScroll.prototype = function () {
   Object.defineProperty(SmoothScroll.prototype, "preventScroll", {
     set: function (state) { this.prevent = state; }
   });
-
-//   Object.defineProperty(SmoothScroll.prototype, "getSize", {
-//     get: function () { return this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))}
-//   });
-  
   
   export { SmoothScroll };
   
