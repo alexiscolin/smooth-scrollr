@@ -26,6 +26,7 @@ import {SmoothScroll} from '../../src/index.js';
     };
 
     const scroll = new SmoothScroll(opts);
+    console.log(scroll)
     // setTimeout(_ => {
     //     scroll.destroy()
     //     console.log(scroll)

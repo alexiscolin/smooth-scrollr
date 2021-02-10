@@ -1,5 +1,6 @@
 import { options } from './config';
 import { Preloader } from './preloader';
+import { Events } from './events';
 
 /*==============================*/
 /*==============================*/
@@ -27,59 +28,6 @@ SmoothScroll.prototype = function () {
      **********************/
   
     /**
-    /*  EVENTS - events binded to the DOM through addEventListener  */
-    /*  @param {object} e - event properties */
-    /* */
-  
-    const _onWheel = function (e) {
-        //   e.preventDefault(); //need it here ?
-        const dir = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
-        this.move.dest += (this.runFirefox && e.deltaMode == 1) ? dir * this.config.speed * this.config.multFirefox : dir * this.config.speed;
-  
-        _requestTick.call(this); // start animation
-    };
-  
-    const _onTouchStart = function (e) {
-        const t = (e.targetTouches) ? e.targetTouches[0] : e;
-        this.move.touch = {
-            pageY:  t.pageY,
-            pageX: t.pageX
-        };
-    };
-  
-    const _onTouchMove = function (e) {
-        const t = (e.targetTouches) ? e.targetTouches[0] : e;
-        const moveY = t.pageY;
-        const moveX = t.pageX;
-        const dir = Math.abs(t.pageY - this.move.touch.pageY) > Math.abs(t.pageX - this.move.touch.pageX) ? 'pageY' : 'pageX';
-        const move = (dir === "pageY" ? moveY : moveX);
-
-        this.move.dest += -(move -  this.move.touch[dir]) * this.config.touchSpeed; //mouvement
-
-        this.move.touch = {
-            pageY: moveY,
-            pageX: moveX
-        }; // update touch
-  
-        _requestTick.call(this); // start animation
-    };
-  
-    const _onKeydown = function (e) {
-        if (e.keyCode === 38 || e.keyCode === 40) e.preventDefault();
-  
-        // if downKey is pressed, then jump + else if upKey is pressed, then jump - else 0
-        this.move.dest += e.keyCode === 38 ? -this.config.jump : (e.keyCode === 40 ? this.config.jump : 0); // 38 up arrow && 40 down arrow
-  
-        _requestTick.call(this); // start animation
-    };
-  
-    const _onScroll = function (e) {
-        this.move.dest = window.scrollY || window.pageYOffset;
-        _requestTick.call(this); // start animation
-    };
-  
-  
-    /**
     /*  REQUEST-TICK - request an animation from rAF if rAF is available  */
     /* */
     const _requestTick = function () {
@@ -88,7 +36,6 @@ SmoothScroll.prototype = function () {
             this.config.ticking = true; // wait for a ticket before request a new rAF
         }
     },
-  
   
     /**
     /*  UPDATE - run animation in requestAnimationFrame  */
@@ -111,8 +58,8 @@ SmoothScroll.prototype = function () {
         }
 
         // get scroll Level inside body size
-        this.move.dest = Math.round(Math.max(0, Math.min(this.move.dest, this.config.scrollMax)));
-
+        this.move.dest = Math.round(Math.max(0, Math.min(this.events.dest, this.config.scrollMax)));
+        this.events.dest = this.move.dest;
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
             this.move.current += (this.move.dest - this.move.current) * this.config.delay;
@@ -125,7 +72,7 @@ SmoothScroll.prototype = function () {
 
                 // check if section should move (inView)
                 if (this.move.current > this.sections[i].offset && this.move.current < this.sections[i].limit) {
-                    this.sections[i].el.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
+                    this.sections[i].el.style.transform = this.events.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
                     !this.sections[i].isInView && (this.sections[i].el.style.visibility = 'visible');
                     this.sections[i].isInView = true;
                 } else {
@@ -143,47 +90,7 @@ SmoothScroll.prototype = function () {
             this.config.ticking = false;
             cancelAnimationFrame(this.rAF);
         }
-    },
-  
-  
-    /**
-    /*  DOM-EVENT - bind / unbind events to the DOM  */
-    /*  @param {string} method - bind / unbind */
-    /* */
-    _domEvent = function (method = 'bind') {
-  
-        const listener = method === 'bind' ? 'addEventListener' : (method === 'unbind' ? 'removeEventListener' : null);
-        if (listener === null) throw "_domEvent function - wrong method! expect 'bind' || 'unbind' : got " + method;
-  
-        //Add/remove resize event
-        if (this.config.resize === true) {
-            this._resize = this._resize || resize.bind(this)
-            window[listener]('resize', this._resize, false);
-        }
-  
-        // on/off smooth scroll events on device
-        if (this.enableSmoothScroll) {
-  
-            // Events modifications
-            this.deviceHasEvents.wheel && (this._wheelFunc || (this._wheelFunc = _onWheel.bind(this))) && document[listener]('wheel', this._wheelFunc, false);
-            this.deviceHasEvents.mouseWheel && (this._mouWheelFunc || (this._mouWheelFunc = _onWheel.bind(this))) && document[listener]('mousewheel', this._mouWheelFunc, false);
-            this.deviceHasEvents.keys && (this._keysFunc || (this._keysFunc = _onKeydown.bind(this))) && document[listener]('keydown', this._keysFunc, false);
-  
-            if (this.deviceHasEvents.touch) {
-                !this._touchStatFunc && (this._touchStatFunc = _onTouchStart.bind(this));
-                !this._touchMoveFunc && (this._touchMoveFunc = _onTouchMove.bind(this));
-  
-                document[listener]("touchstart", this._touchStatFunc);
-                document[listener]("touchmove", this._touchMoveFunc);
-            }
-  
-        } else if (this.config.parallax) {
-            // bind scroll if touch is disabled and parallax enabled
-            !this._scrollFunc && (this._scrollFunc = _onScroll.bind(this));
-            document[listener]("scroll", this._scrollFunc, false);
-        }
-    },
-  
+    },  
   
     /**
     /*  FIXED-VIEWPORT - block the viewport for smoothscroll with class or inline style */
@@ -242,20 +149,6 @@ SmoothScroll.prototype = function () {
         this.sections.sort((a, b) => this.config.direction === 'vertical' ? a.boundrect.top - b.boundrect.top : a.boundrect.left - b.boundrect.left);
     },
 
-
-    /**
-    /*  DEVICE-DETECT-EVENT - get events browsers compatibility  */
-    /* */
-    _deviceDetectEvent = function () {
-        return {
-            wheel: 'onwheel' in document,
-            mouseWheel: 'onmousewheel' in document,
-            touch: ('ontouchstart' in window) || (navigator.maxTouchPoints > 0) || (navigator.msMaxTouchPoints > 0),
-            keys: 'onkeydown' in document
-        }
-    }, 
-
-
     /**
     /*  GET-TRANSLATE - get translation style utility  */
     /* */
@@ -287,7 +180,6 @@ SmoothScroll.prototype = function () {
         /** VARIABLES  **/
         // config init
         Object.assign(this.config, options, config);
-        console.log(this.config)
         
         // DOM elements init
         this.DOM.scroller = config.section;
@@ -297,30 +189,24 @@ SmoothScroll.prototype = function () {
         this.move = {
             current: 0,
             dest: 0,
-            prev: 0,
-            touch: 0
+            prev: 0
         };
   
         /** FUNCS **/
         // preload medias
         this.preload = this.config.preload && new Preloader(this.DOM.scroller, [success => this.resize(), ...this.config.initFuncs]);
-        console.log(this.preload);
 
         // set scroll module size
         resize.call(this);
   
-        // detect if the browser is Firefox
-        this.runFirefox = navigator.userAgent.indexOf("Firefox") > -1;
-  
-        // get event compatibility and allowance for scroll
-        this.deviceHasEvents = _deviceDetectEvent();
-        this.enableSmoothScroll = !this.deviceHasEvents.touch || this.config.touch;
-
         // if parallax, get elements to move
         this.callback = this.config.callback;
   
         //bind events
+        const eventOpt = (({touch, parallax, speed, multFirefox, touchSpeed, jump}) => ({touch, parallax, speed, multFirefox, touchSpeed, jump}))(this.config);
+        this.events = new Events(eventOpt, _requestTick.bind(this));
         bindEvent.call(this);
+        
     },
   
   
@@ -328,8 +214,9 @@ SmoothScroll.prototype = function () {
     /*  BIND-EVENT - bind events to the DOM && start rAF */
     /* */
     bindEvent = function () {
-        this.enableSmoothScroll && _fixedViewPort.call(this);
-        _domEvent.call(this, 'bind');
+        this.events.enableSmoothScroll && _fixedViewPort.call(this);
+        this.events.domEvent('bind');
+        // _domEvent.call(this, 'bind');
     },
   
   
@@ -337,7 +224,9 @@ SmoothScroll.prototype = function () {
     /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
     /* */
     unbindEvent = function () {
-        _domEvent.call(this, 'unbind');
+        // _domEvent.call(this, 'unbind');
+        this.events.domEvent('unbind');
+
         if (typeof this.rAF !== 'undefined') {
             cancelAnimationFrame(this.rAF);
             this.rAF = null;
@@ -351,7 +240,7 @@ SmoothScroll.prototype = function () {
     scrollTo = function (dir, immediate = false) {
         this.move.dest = dir;
         immediate || (_requestTick.call(this)); // start animation
-        immediate && (this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
+        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
     },
 
     /**
@@ -360,7 +249,7 @@ SmoothScroll.prototype = function () {
     scrollOf = function (path, immediate = false) {
         this.move.dest += path;
         immediate || (_requestTick.call(this)); // start animation
-        immediate && (this.DOM.scroller.style.transform = this.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
+        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
         return 'true';
     },
   
@@ -389,7 +278,6 @@ SmoothScroll.prototype = function () {
   
         for (let prop in this) {
             if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
-            console.log(this[prop])
             this[prop] = null;
             delete this[prop];
         }

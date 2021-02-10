@@ -10,6 +10,7 @@ export const options = {
     fixedClass: false,
     resize: true,
     preload:true,
+    parallax: false,
     multFirefox: 15,
     scrollMax: 0,
     ticking: false,

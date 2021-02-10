@@ -43,7 +43,7 @@ smoothscroll.start(); // run run run!
 
 **direction** - String (optional | 'vertical' || 'horizontal' | default: 'vertical') scroll direction; If horizontal, avoid to set container width in any value other than `auto` in order to create a container that is bigger than the viewport.
 
-**parallax** - Boolean (optional | default: false) enable parallax on scroll from parallax module;
+**parallax** - Boolean (optional | default: false) enable callback effects on scroll from 'on' property;
 
 **touch** - Boolean (optional | default: false) enable smooth scroll on touch event;
 
