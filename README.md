@@ -71,12 +71,6 @@ You can also use this method after setting `preventScroll` to `true` if you want
 smoothscroll.start(); // run smoothscroll
 ``` -->
 
-#### ```bindEvent```
-In order to bind scrolling events to the DOM and start a requestAnimationFrame (auto in new instance, use it after an unbind method)
-
-#### ```unbindEvent```
-In order to unbind scrolling events to the DOM and cancel the requestAnimationFrame
-
 #### ```destroy```
 In order to destroy smooth-scroll class instance and all its properties.
 

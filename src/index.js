@@ -167,10 +167,30 @@ SmoothScroll.prototype = function () {
         translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
     
         return translate;
-    }
+    },
+
+    /**
+    /*  BIND-EVENT - bind events to the DOM && start rAF */
+    /* */
+    _bindEvent = function () {
+        this.events.enableSmoothScroll && _fixedViewPort.call(this);
+        this.events.domEvent('bind');
+    },
+  
+  
+    /**
+    /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
+    /* */
+    _unbindEvent = function () {
+        this.events.domEvent('unbind');
+
+        if (typeof this.rAF !== 'undefined') {
+            cancelAnimationFrame(this.rAF);
+            this.rAF = null;
+        }
+    };
 
     
-  
   
     /**********************
      ****** PUBLICS ******
@@ -205,34 +225,9 @@ SmoothScroll.prototype = function () {
         //bind events
         const eventOpt = (({touch, parallax, speed, multFirefox, touchSpeed, jump}) => ({touch, parallax, speed, multFirefox, touchSpeed, jump}))(this.config);
         this.events = new Events(eventOpt, _requestTick.bind(this));
-        bindEvent.call(this);
+        _bindEvent.call(this);
         
     },
-  
-  
-    /**
-    /*  BIND-EVENT - bind events to the DOM && start rAF */
-    /* */
-    bindEvent = function () {
-        this.events.enableSmoothScroll && _fixedViewPort.call(this);
-        this.events.domEvent('bind');
-        // _domEvent.call(this, 'bind');
-    },
-  
-  
-    /**
-    /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
-    /* */
-    unbindEvent = function () {
-        // _domEvent.call(this, 'unbind');
-        this.events.domEvent('unbind');
-
-        if (typeof this.rAF !== 'undefined') {
-            cancelAnimationFrame(this.rAF);
-            this.rAF = null;
-        }
-    },
-  
   
     /**
     /*  SCROLL-TO - scroll to given location */
@@ -267,14 +262,12 @@ SmoothScroll.prototype = function () {
     /*  DESTROY - destroy content */
     /* */
     destroy = function () {
-        // if (this.prlx) {
-        //     this.prlx = this.prlx.destroy();
-        //     delete this.prlx;
-        // }
-
+    
         if(this.preload) this.preload.destroy()
   
-        this.unbindEvent.call(this);
+        this._unbindEvent.call(this);
+        this.events.destroy()
+
   
         for (let prop in this) {
             if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
@@ -289,8 +282,6 @@ SmoothScroll.prototype = function () {
     return {
         init,
         resize,
-        bindEvent,
-        unbindEvent,
         scrollTo,
         scrollOf,
         destroy
