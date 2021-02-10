@@ -39,9 +39,9 @@ smoothscroll.start(); // run run run!
 * Preload media (images, video) system
 
 ## Options and Settings
-**section** - NodeType (optional | default: body) DOM section that you want to make scrollable;
+**section** - NodeType (optional | default: body) DOM section that you want to make scrollable or data-scroll-containers parent if you want to use multi wrapper option (make sure the parent wrap all children in horizontal scroll case).
 
-**direction** - String (optional | 'vertical' || 'horizontal' | default: 'vertical') scroll direction; If horizontal, avoid to set container width in any value other than `auto` in order to create a container that is bigger than the viewport.
+**direction** - String (optional | 'vertical' || 'horizontal' | default: 'vertical') scroll direction; If horizontal, avoid to set section width in any value other than `auto` in order to create a container that is bigger than the viewport.
 
 **parallax** - Boolean (optional | default: false) enable callback effects on scroll from 'on' property;
 
@@ -100,6 +100,7 @@ In order to freeze scrolling movement. Change this property by setting it to tru
 smoothscroll.preventScroll = true; // freeze scroll
 smoothscroll.preventScroll = false; // let it free
 ```
+
 
 ## ENJOY !
 ![enjoy](https://media.giphy.com/media/qyCDVJBPdBET6/giphy.gif)

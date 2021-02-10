@@ -1,5 +1,4 @@
 var Preloader = function (DOM = {}, success = [], fail = []) {
-    this.name = 'preloader';
     this.DOM = {};
     this.events = {
         success: [],

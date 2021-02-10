@@ -10,14 +10,10 @@ import { getTranslate } from './modules/utils';
 /*==============================*/
 
 var SmoothScroll = function (config = {}, viewPortclass = null) {
-    this.name = 'scroll';
     this.DOM = {};
     this.config = {};
     this.move = {};
-    this.callbackslisteners = {};
-    this.bindedlisteners = {};
     this.sections = [];
-    // this.callback = [];
     this.scrollStatut = 'start';
   
     this.init(config, viewPortclass);
@@ -29,6 +25,13 @@ SmoothScroll.prototype = function () {
     /***********************
      ****** PRIVATES ******
      **********************/
+    /**
+    /*  VARIABLES
+    /* */
+    const callbackslisteners = {};
+    const bindedlisteners = {};
+    const global = {};
+
   
     /**
     /*  REQUEST-TICK - request an animation from rAF if rAF is available  */
@@ -49,18 +52,18 @@ SmoothScroll.prototype = function () {
         
         // scroll action in function of scroll position (statut)
         if(this.move.dest >= this.config.scrollMax && this.scrollStatut !== 'end'){
-            if (this.callbackslisteners.collisionBottom && this.callbackslisteners.collisionBottom.length > 0) {
+            if (callbackslisteners.collisionBottom && callbackslisteners.collisionBottom.length > 0) {
                 _scrollCallback.call(this, 'collisionBottom');
             }
             this.scrollStatut = 'end';
         } else if(this.move.dest <= 0 && this.scrollStatut !== 'start') {
-            if (this.callbackslisteners.collisionTop && this.callbackslisteners.collisionTop.length > 0) {
+            if (callbackslisteners.collisionTop && callbackslisteners.collisionTop.length > 0) {
                 _scrollCallback.call(this, 'collisionTop');
             }
             this.scrollStatut = 'start';
 
         } else if (this.move.dest > 0 && this.move.dest < this.config.scrollMax && this.scrollStatut !== 'running') {
-            if (this.callbackslisteners.collisionEnded && this.callbackslisteners.collisionEnded.length > 0) {
+            if (callbackslisteners.collisionEnded && callbackslisteners.collisionEnded.length > 0) {
                 _scrollCallback.call(this, 'collisionEnded');
             }
             this.scrollStatut = 'running';
@@ -68,6 +71,7 @@ SmoothScroll.prototype = function () {
 
         // get scroll Level inside body size
         this.move.dest = Math.round(Math.max(0, Math.min(this.events.dest, this.config.scrollMax)));
+
         this.events.dest = this.move.dest;
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
@@ -91,7 +95,7 @@ SmoothScroll.prototype = function () {
             }
 
             // scroll callbacks
-            if (this.callbackslisteners.scroll && this.callbackslisteners.scroll.length > 0) {
+            if (callbackslisteners.scroll && callbackslisteners.scroll.length > 0) {
                 _scrollCallback.call(this, 'scroll');
             }
   
@@ -128,12 +132,10 @@ SmoothScroll.prototype = function () {
     /* */
     _addSection = function () {
         this.sections = [];
-
-        let sections = this.DOM.scroller.querySelectorAll(`[data-${this.name}-section]`);
+        let sections = this.DOM.scroller.querySelectorAll(`[data-scroll-container]`);
         if (sections.length === 0) {
            sections = [this.DOM.scroller];
         }
-
         //create observer and info for each section
         [...sections].forEach(section => {
             const sectionData = {};
@@ -161,23 +163,68 @@ SmoothScroll.prototype = function () {
 
 
     /**
+    /*  _SCROLL-CALLBACKS - fire event */
+    /* */
+    _scrollCallback = function (event = 'scroll') {
+        const scrollEvent = new Event(`on-${event}`);
+        this.DOM.scroller.dispatchEvent(scrollEvent);
+    },
+
+
+    /**
+    /*  _LIST-CALLBACKS - events callbacks actions  */
+    /* */
+    _listCallbacks = function (e) {
+        // get real name
+        const eventName = e.type.replace('on-','');
+        // get the global list of dedicated event
+        const list = callbackslisteners[eventName];
+
+        if (!list || list.length === 0) return;
+
+        // call the right callback with dedicated arguments
+        list.forEach((callback) => {
+            if(typeof callback !== "function") return;
+            switch (eventName) {
+                case 'scroll':
+                    return callback(this.move);
+                default:
+                    return callback();
+            }
+        });
+    },
+
+
+    /**
     /*  BIND-EVENT - bind events to the DOM && start rAF */
     /* */
     _bindEvent = function () {
         this.events.enableSmoothScroll && _fixedViewPort.call(this);
         this.events.domEvent('bind');
+
+        // add resize event
+        if (this.config.resize === true) {
+            global.resize = resize.bind(this);
+            this.on('resize', global.resize, window);
+        }
     },
-  
+    
   
     /**
     /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
     /* */
     _unbindEvent = function () {
-        // remove internal events
+        // remove internal scroll events
         this.events.domEvent('unbind');
 
+
+        // // remove resize event
+        if (this.config.resize === true) {
+            this.off('resize', global.resize, window);
+        }
+
         // remove external events - recursive named iife to avoid breaking foreach erasing itself loop or "deep copy perf issue" 
-        for (let [key, value] of Object.entries(this.callbackslisteners)) {
+        for (let [key, value] of Object.entries(callbackslisteners)) {
             (function deleteVal () {
                 off.call(this, key, value[value.length - 1])
                 if(value.length > 0) deleteVal.call(this)
@@ -228,11 +275,20 @@ SmoothScroll.prototype = function () {
         
     },
 
+
     /**
     /*  GET-SIZE - get container size */
     /* */
     getSize = function () { 
-        return this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))
+        const dirVert = this.config.direction === 'vertical';
+        let size = dirVert ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))
+       
+        // if parent doesn't wrap completely section children
+        // if (size === 0) {
+            // size = this.sections.reduce((result, section) => result + (this.config.direction === 'vertical' ? section.boundrect.height : section.boundrect.width), 0);
+            // size -= dirVert ? (document.documentElement.clientHeight || window.innerHeight) : (document.documentElement.clientWidth || window.innerWidth);
+        // }
+        return size;
     },
 
   
@@ -255,7 +311,7 @@ SmoothScroll.prototype = function () {
         return 'true';
     },
   
-  
+
     /**
     /*  RESIZE - recalc vars after a resize */
     /* */
@@ -264,70 +320,48 @@ SmoothScroll.prototype = function () {
         this.config.scrollMax = getSize.call(this);
     },
 
-    _scrollCallback = function (event = 'scroll') {
-        const scrollEvent = new Event(`on-${event}`);
-        this.DOM.scroller.dispatchEvent(scrollEvent);
-    },
-
-    _listCallbacks = function (e) {
-        // get real name
-        const eventName = e.type.replace('on-','');
-        // get the global list of dedicated event
-        const list = this.callbackslisteners[eventName];
-
-        if (!list || list.length === 0) return;
-
-        // call the right callback with dedicated arguments
-        list.forEach((callback) => {
-            if(typeof callback !== "function") return;
-            switch (eventName) {
-                case 'scroll':
-                    return callback(this.move);
-                default:
-                    return callback();
-            }
-        });
-    },
 
     /**
     /*  ON - public event binder */
     /* */
-    on = function (event, cb) {
+    on = function (event, cb, context = this.DOM.scroller) {
         const events = [
             'scroll',
             'collisionTop',
             'collisionBottom',
-            'collisionEnded'
+            'collisionEnded',
+            'resize'
         ]
         if (!events.includes(event)) throw "'on' function - wrong event! : got " + event;
 
         // test if there are at least one event
-        if (!this.callbackslisteners[event]) {
-            this.callbackslisteners[event] = [];
+        if (!callbackslisteners[event]) {
+            callbackslisteners[event] = [];
         }
 
-        const list = this.callbackslisteners[event];
+        const list = callbackslisteners[event];
         list.push(cb);
 
         // listen if related function
         if (list.length === 1) {
-            this.bindedlisteners[event] = _listCallbacks.bind(this);
-            this.DOM.scroller.addEventListener('on-' + event, this.bindedlisteners[event], false);
+            bindedlisteners[event] = _listCallbacks.bind(this);
+            context.addEventListener(context !== window ? 'on-' : '' + event, bindedlisteners[event], false);
         }
     },
+
 
     /**
     /*  OFF - remove public events */
     /* */
-    off = function (event, cb) {
-        const list = this.callbackslisteners[event];
+    off = function (event, cb, context = this.DOM.scroller) {
+        const list = callbackslisteners[event];
         // remove event from original events listing index
         list.forEach((el, index) => el === cb && list.splice(index,1))
 
         // if no more event, remove the listener
         if (list.length === 0) {
-            this.DOM.scroller.removeEventListener('on-' + event, this.bindedlisteners[event], false);
-            delete this.bindedlisteners[event];
+            context.removeEventListener(context !== window ? 'on-' : '' + event, bindedlisteners[event], false);
+            delete bindedlisteners[event];
         }
     },
   
@@ -341,7 +375,6 @@ SmoothScroll.prototype = function () {
   
         _unbindEvent.call(this);
         this.events.destroy()
-
   
         for (let prop in this) {
             if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;

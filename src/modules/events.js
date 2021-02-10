@@ -1,6 +1,5 @@
 
 var Events = function (config, callback) {
-    this.name = 'events';
     this.config = {};
     this.move = {};
     this.callback = null;
@@ -100,7 +99,7 @@ Events.prototype = function () {
     const domEvent = function (method = 'bind') {
         const listener = method === 'bind' ? 'addEventListener' : (method === 'unbind' ? 'removeEventListener' : null);
         if (listener === null) throw "_domEvent function - wrong method! expect 'bind' || 'unbind' : got " + method;
-  
+        
         // on/off smooth scroll events on device
         if (this.enableSmoothScroll) {
   

@@ -5,8 +5,15 @@ body {
 }
 
 .wrapper {
-    position: relative;
+    position: absolute;
     width: 100%;
+    display: flex;
+}
+.wrapper--horizontal {
+    position: absolute; /* relative doesn't wrap */ 
+    width: auto;
+    display: flex;
+
 }
 
 .container {
@@ -22,6 +29,9 @@ body {
     flex-direction: row;
     min-height: 100vh;
     width: auto;
+}
+.container--section {
+    position: relative;
 }
 
 .container_item {
