@@ -262,8 +262,11 @@ SmoothScroll.prototype = function () {
   
         /** FUNCS **/
         // preload medias
-        this.preload = this.config.preload && new Preloader(this.DOM.scroller, [success => this.resize(), ...this.config.initFuncs]);
-
+        if(this.config.preload){
+            this.preload = new Preloader(this.DOM.scroller, [success => this.resize(), ...this.config.initFuncs]);
+        } else {
+            this.config.initFuncs && this.config.initFuncs.forEach(fn => fn());
+        } 
         // set scroll module size
         resize.call(this);
   
