@@ -1,6 +1,7 @@
 import { options } from './config';
 import { Preloader } from './preloader';
 import { Events } from './events';
+import { getTranslate } from './utils';
 
 /*==============================*/
 /*==============================*/
@@ -134,10 +135,10 @@ SmoothScroll.prototype = function () {
 
             // set section disposition
             if (this.config.direction === "vertical") {
-                sectionData.offset = sectionData.boundrect.top - (window.innerHeight * 1.5) - _getTranslate(sectionData.el).y;
+                sectionData.offset = sectionData.boundrect.top - (window.innerHeight * 1.5) - getTranslate(sectionData.el).y;
                 sectionData.limit = sectionData.offset + sectionData.boundrect.height + (window.innerHeight * 2);
             } else {
-                sectionData.offset = sectionData.boundrect.left - (window.innerWidth * 1.5) - _getTranslate(sectionData.el).x;
+                sectionData.offset = sectionData.boundrect.left - (window.innerWidth * 1.5) - getTranslate(sectionData.el).x;
                 sectionData.limit = sectionData.offset + sectionData.boundrect.width + (window.innerWidth * 2);
             }
 
@@ -149,25 +150,6 @@ SmoothScroll.prototype = function () {
         this.sections.sort((a, b) => this.config.direction === 'vertical' ? a.boundrect.top - b.boundrect.top : a.boundrect.left - b.boundrect.left);
     },
 
-    /**
-    /*  GET-TRANSLATE - get translation style utility  */
-    /* */
-    _getTranslate = function (el) {
-        const translate = {}
-        if(!window.getComputedStyle) return;
-    
-        const style = getComputedStyle(el);
-        const transform = style.transform || style.webkitTransform || style.mozTransform;
-    
-        let mat = transform.match(/^matrix3d\((.+)\)$/);
-        if(mat) return parseFloat(mat[1].split(', ')[13]);
-    
-        mat = transform.match(/^matrix\((.+)\)$/);
-        translate.x = mat ? parseFloat(mat[1].split(', ')[4]) : 0;
-        translate.y = mat ? parseFloat(mat[1].split(', ')[5]) : 0;
-    
-        return translate;
-    },
 
     /**
     /*  BIND-EVENT - bind events to the DOM && start rAF */
@@ -228,6 +210,14 @@ SmoothScroll.prototype = function () {
         _bindEvent.call(this);
         
     },
+
+    /**
+    /*  GET-SIZE - get container size */
+    /* */
+    getSize = function () { 
+        return this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))
+    },
+
   
     /**
     /*  SCROLL-TO - scroll to given location */
@@ -254,7 +244,7 @@ SmoothScroll.prototype = function () {
     /* */
     resize = function () {
         _addSection.call(this);
-        this.config.scrollMax = this.getSize;
+        this.config.scrollMax = getSize.call(this);
     },
   
   
@@ -265,7 +255,7 @@ SmoothScroll.prototype = function () {
     
         if(this.preload) this.preload.destroy()
   
-        this._unbindEvent.call(this);
+        _unbindEvent.call(this);
         this.events.destroy()
 
   
@@ -281,6 +271,7 @@ SmoothScroll.prototype = function () {
   
     return {
         init,
+        getSize,
         resize,
         scrollTo,
         scrollOf,
@@ -293,9 +284,9 @@ SmoothScroll.prototype = function () {
     set: function (state) { this.prevent = state; }
   });
 
-  Object.defineProperty(SmoothScroll.prototype, "getSize", {
-    get: function () { return this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))}
-  });
+//   Object.defineProperty(SmoothScroll.prototype, "getSize", {
+//     get: function () { return this.config.direction === 'vertical' ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))}
+//   });
   
   
   export { SmoothScroll };

@@ -22,7 +22,6 @@ Events.prototype = function () {
         //   e.preventDefault(); //need it here ?
         const dir = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
         this.move.dest += (this.runFirefox && e.deltaMode == 1) ? dir * this.config.speed * this.config.multFirefox : dir * this.config.speed;
-
         this.callback(); // start animation
     };
 
@@ -125,19 +124,26 @@ Events.prototype = function () {
         }
     };
 
-    const move = function () {
-        return this.move;
-    };
-
     const enableSmoothScroll = function () {
         return this.enableSmoothScroll;
-    }
+    };
+
+    const destroy = function () {
+
+        for (let prop in this) {
+            if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
+            this[prop] = null;
+            delete this[prop];
+        }
+  
+        return null;
+    };
 
     return {
         init,
         domEvent,
-        move,
-        enableSmoothScroll
+        enableSmoothScroll,
+        destroy
     }
 }()
 
