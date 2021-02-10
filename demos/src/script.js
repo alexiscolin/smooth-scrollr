@@ -32,7 +32,7 @@ import {SmoothScroll} from '../../src/index.js';
     // scroll.on("scroll", test);
     // scroll.on("scroll", test2);
     scroll.on('scroll', test2);
-    scroll.on('collisionEnd', test);
+    scroll.on('collisionBottom', test);
     // scroll.on("scroll", test2);
 
     // setTimeout(_ => {

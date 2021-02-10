@@ -1,7 +1,7 @@
-import { options } from './config';
-import { Preloader } from './preloader';
-import { Events } from './events';
-import { getTranslate } from './utils';
+import { options } from './modules/config';
+import { Preloader } from './modules/preloader';
+import { Events } from './modules/events';
+import { getTranslate } from './modules/utils';
 
 /*==============================*/
 /*==============================*/
@@ -49,12 +49,12 @@ SmoothScroll.prototype = function () {
         
         // scroll action in function of scroll position (statut)
         if(this.move.dest >= this.config.scrollMax && this.scrollStatut !== 'end'){
-            if (this.callbackslisteners.collisionEnd && this.callbackslisteners.collisionEnd.length > 0) {
+            if (this.callbackslisteners.collisionBottom && this.callbackslisteners.collisionBottom.length > 0) {
                 _scrollCallback.call(this, 'collisionBottom');
             }
             this.scrollStatut = 'end';
         } else if(this.move.dest <= 0 && this.scrollStatut !== 'start') {
-            if (this.callbackslisteners.collisionStart && this.callbackslisteners.collisionStart.length > 0) {
+            if (this.callbackslisteners.collisionTop && this.callbackslisteners.collisionTop.length > 0) {
                 _scrollCallback.call(this, 'collisionTop');
             }
             this.scrollStatut = 'start';
@@ -89,9 +89,10 @@ SmoothScroll.prototype = function () {
                     this.sections[i].isInView = false;
                 }
             }
-            // this.DOM.scroller.style.transform = this.enableSmoothScroll && !this.prevent && `translate3D(${this.config.direction === 'horizontal' ? moveTo : 0}px,${this.config.direction === 'vertical' ? moveTo : 0}px, 0)`;
+
+            // scroll callbacks
             if (this.callbackslisteners.scroll && this.callbackslisteners.scroll.length > 0) {
-                _scrollCallback.call(this);
+                _scrollCallback.call(this, 'scroll');
             }
   
             this.move.prev = Math.round(this.move.current);
