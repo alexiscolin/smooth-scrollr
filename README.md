@@ -20,7 +20,7 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
+<!-- [![Contributors][contributors-shield]][contributors-url] -->
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
@@ -31,7 +31,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/alexiscolin/smooth-scrollr">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="https://files.de-jaune-et-de-bleu.com/img/github/smooth-scrollr/smooth-scroller-logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">🖱️ smooth-scrollr</h3>
@@ -40,7 +40,7 @@
     Simple smooth scrolling module based on fake scroll events (aka wheel and touch and keyPress...).
     <br />
     <br />
-    <a href="https://github.com/alexiscolin/demos">View Demo</a>
+    <a href="https://github.com/alexiscolin/smooth-scrollr/tree/master/demos">View Demos</a>
     ·
     <a href="https://github.com/alexiscolin/smooth-scrollr/issues">Report Bug</a>
     ·
@@ -87,10 +87,6 @@
 ## About The Project
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
-
-This repo 
-**To avoid retyping too much info. Do a search and replace with your text editor for the following:**
-`github_username`, `repo_name`, `twitter_handle`, `email`, `project_title`, `project_description`
 
 
 ### Built With
