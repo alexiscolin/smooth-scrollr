@@ -70,12 +70,21 @@ SmoothScroll.prototype = function () {
         }
 
         // get scroll Level inside body size
-        this.move.dest = Math.round(Math.max(0, Math.min(this.events.dest, this.config.scrollMax)));
-
+        this.move.dest = this.prevent ? this.move.current : Math.round(Math.max(0, Math.min(this.events.dest, this.config.scrollMax)));
         this.events.dest = this.move.dest;
+
+        // cancel or not the scroll
+        if(this.prevent) {
+            this.move.prev = this.move.dest;
+            this.events.dest = this.events.dest
+        } else {
+            this.move.dest = Math.round(Math.max(0, Math.min(this.events.dest, this.config.scrollMax)));
+            this.events.dest = this.move.dest;    
+        }
+
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
-            this.move.current += (this.move.dest - this.move.current) * this.config.delay;
+            this.move.current += this.prevent ? 0 : (this.move.dest - this.move.current) * this.config.delay;
   
             // update scroll && parallax positions
             this.move.position = -this.move.current.toFixed(2);
@@ -126,7 +135,6 @@ SmoothScroll.prototype = function () {
         return true;
     },
 
-
     /**
     /*  ADD-SECTION - Create info and observer for section on the page  */
     /* */
@@ -161,7 +169,6 @@ SmoothScroll.prototype = function () {
         this.sections.sort((a, b) => this.config.direction === 'vertical' ? a.boundrect.top - b.boundrect.top : a.boundrect.left - b.boundrect.left);
     },
 
-
     /**
     /*  _SCROLL-CALLBACKS - fire event */
     /* */
@@ -169,7 +176,6 @@ SmoothScroll.prototype = function () {
         const scrollEvent = new Event(`on-${event}`);
         this.DOM.scroller.dispatchEvent(scrollEvent);
     },
-
 
     /**
     /*  _LIST-CALLBACKS - events callbacks actions  */
@@ -194,7 +200,6 @@ SmoothScroll.prototype = function () {
         });
     },
 
-
     /**
     /*  BIND-EVENT - bind events to the DOM && start rAF */
     /* */
@@ -209,7 +214,6 @@ SmoothScroll.prototype = function () {
         }
     },
     
-  
     /**
     /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
     /* */
@@ -238,7 +242,6 @@ SmoothScroll.prototype = function () {
         }
     };
 
-    
   
     /**********************
      ****** PUBLICS ******
@@ -281,7 +284,6 @@ SmoothScroll.prototype = function () {
         
     },
 
-
     /**
     /*  GET-SIZE - get container size */
     /* */
@@ -297,7 +299,6 @@ SmoothScroll.prototype = function () {
         return size;
     },
 
-  
     /**
     /*  SCROLL-TO - scroll to given location */
     /* */
@@ -316,7 +317,6 @@ SmoothScroll.prototype = function () {
         immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
         return 'true';
     },
-  
 
     /**
     /*  RESIZE - recalc vars after a resize */
@@ -325,7 +325,6 @@ SmoothScroll.prototype = function () {
         _addSection.call(this);
         this.config.scrollMax = getSize.call(this);
     },
-
 
     /**
     /*  PREVENT-SCROLL - recalc vars after a resize */
@@ -362,7 +361,6 @@ SmoothScroll.prototype = function () {
         }
     },
 
-
     /**
     /*  OFF - remove public events */
     /* */
@@ -377,7 +375,6 @@ SmoothScroll.prototype = function () {
             delete bindedlisteners[event];
         }
     },
-  
   
     /**
     /*  DESTROY - destroy content */
@@ -397,7 +394,6 @@ SmoothScroll.prototype = function () {
   
         return null;
     };
-  
   
     return {
         init,
