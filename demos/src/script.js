@@ -17,4 +17,11 @@ import {SmoothScroll} from '../../src/index.js';
     };
 
     const scroll = new SmoothScroll(opts);
+
+    setTimeout(_ => {
+       scroll.preventScroll(true);
+       setTimeout(_ => {
+        scroll.preventScroll(false);
+     }, 2000);
+    }, 2000);
 })()

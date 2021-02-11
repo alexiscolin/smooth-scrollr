@@ -183,15 +183,17 @@ _Note: 'fixedClass' is optional and set the class you define to block real scrol
 
 
 ## Methods
-| Methods      | Description                                                         | Arguments                                                                                                                                                                                                                                                                                                                                       |
-|--------------|---------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `scrollTo`   | In order to force scroll to a location on the webpage.              | `dir` : *(number)* - the position in px you want to go on the page<br>- `imediate` : *(boolean - default: false)* - go with/without smooth effect                                                                                                                                                                                               |
-| `scrollFrom` | In order to scroll from a specific number of pixel.                 | `path` : *(number)* - the distance in px you want the page go through<br>- `imediate` : *(boolean - default: false)* with/without smooth effect                                                                                                                                                                                                 |
-| `getSize`    | In order to get the scroller container size.                        |                                                                                                                                                                                                                                                                                                                                                 |
-| `on`         | In order to add a listener function on a specific scroll event.     | `event` : *(string)* - the instance event you want to listen (see the list below)<br>`callback` : *(function)* - the function you want to trigger when the event is dispatched<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do)                            |
-| `off`        | In order to remove a listener function on a specific scroll event.  | `event` : *(string)* - the instance event you want to remove a listener (see the list below)<br>`callback` : *(function)* - the function you want to remove (use the same as you set to add the listener)<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do) |
-| `resize`     | In order to recalculate scroll container.                           |                                                                                                                                                                                                                                                                                                                                                 |
-| `destroy`    | In order to destroy scroll container.                               |                                                                                                                                                                                                                                                                                                                                                 |
+| Methods         | Description                                                        | Arguments                                                                                                                                                                                                                                                                                                                                       |
+|-----------------|--------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `scrollTo`      | In order to force scroll to a location on the webpage.             | `dir` : *(number)* - the position in px you want to go on the page<br>- `imediate` : *(boolean - default: false)* - go with/without smooth effect                                                                                                                                                                                               |
+| `scrollFrom`    | In order to scroll from a specific number of pixel.                | `path` : *(number)* - the distance in px you want the page go through<br>- `imediate` : *(boolean - default: false)* with/without smooth effect                                                                                                                                                                                                 |
+| `getSize`       | In order to get the scroller container size.                       |                                                                                                                                                                                                                                                                                                                                                 |
+| `on`            | In order to add a listener function on a specific scroll event.    | `event` : *(string)* - the instance event you want to listen (see the list below)<br>`callback` : *(function)* - the function you want to trigger when the event is dispatched<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do)                            |
+| `off`           | In order to remove a listener function on a specific scroll event. | `event` : *(string)* - the instance event you want to remove a listener (see the list below)<br>`callback` : *(function)* - the function you want to remove (use the same as you set to add the listener)<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do) |
+| `resize`        | In order to recalculate scroll container.                          |                                                                                                                                                                                                                                                                                                                                                 |
+| `destroy`       | In order to destroy scroll container.                              |                                                                                                                                                                                                                                                                                                                                                 |
+| `preventScroll` | In order to freeze scrolling movement.                             | `state` : *(boolean)* - freeze or unfreeze scroll event                                                                                                                                                                                                                                                                                         |
+
 
 ### Exemples :
 #### Force imediate scroll
@@ -234,17 +236,6 @@ smoothscroll.destroy(); // all events are removed and the instance has been kill
 | `collisionBottom` | trigger when the scroll is at bottom of the page                                 |
 | `collisionEnded`  | trigger once when the scroll stop to be blocked by the collision with page edges |
 
-
-
-
-
-## Properties
-#### ```preventScroll``` - setter
-In order to freeze scrolling movement. Change this property by setting it to true/false.
-``` javascript
-smoothscroll.preventScroll = true; // freeze scroll
-smoothscroll.preventScroll = false; // let it free
-```
 
 
 

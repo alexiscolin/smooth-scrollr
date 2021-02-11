@@ -259,6 +259,9 @@ SmoothScroll.prototype = function () {
             dest: 0,
             prev: 0
         };
+
+        // prevent scroll init
+        this.prevent = false;
   
         /** FUNCS **/
         // preload medias
@@ -323,6 +326,13 @@ SmoothScroll.prototype = function () {
         this.config.scrollMax = getSize.call(this);
     },
 
+
+    /**
+    /*  PREVENT-SCROLL - recalc vars after a resize */
+    /* */
+    preventScroll = function (state) {
+        this.prevent = state;
+    },
 
     /**
     /*  ON - public event binder */
@@ -397,14 +407,10 @@ SmoothScroll.prototype = function () {
         resize,
         scrollTo,
         scrollOf,
+        preventScroll,
         destroy
     }
   }();
-  
-  // SETTER / GETTER
-  Object.defineProperty(SmoothScroll.prototype, "preventScroll", {
-    set: function (state) { this.prevent = state; }
-  });
   
   export { SmoothScroll };
   
