@@ -184,7 +184,7 @@ const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 
 ## Element attribute
 
-- **data-scroll-container** : create a scrollable container inside the `section`. Splitting the page into smaller container is good to improve performance. Only the viewed container will move, so lighten containers will move one after the other. This is totaly optional.
+- `data-scroll-container` : create a scrollable container inside the `section`. Splitting the page into smaller container is good to improve performance. Only the viewed container will move, so lighten containers will move one after the other. This is totaly optional.
 
 
 ## Methods
@@ -299,9 +299,9 @@ Project Link: [https://github.com/alexiscolin/smooth-scrollr](https://github.com
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/alexiscolin/smooth-scrollr.svg?style=for-the-badge
 [contributors-url]: https://github.com/alexiscolin/smooth-scrollr/graphs/contributors
-[issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
-[issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE.txt
+[issues-shield]: https://img.shields.io/github/issues/alexiscolin/smooth-scrollr.svg?style=for-the-badge
+[issues-url]: https://github.com/alexiscolin/smooth-scrollr/issues
+[license-shield]: https://img.shields.io/github/license/alexiscolin/smooth-scrollr.svg?style=for-the-badge
+[license-url]: https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/alexiscolin
