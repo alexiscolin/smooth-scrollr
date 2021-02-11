@@ -75,6 +75,7 @@
         </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#who-is-using">Who is Using</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
@@ -85,9 +86,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 
 ### Built With
 
@@ -160,6 +158,7 @@ const opts = {
 const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 
 ```
+_Note: 'fixedClass' is optional and set the class you define to block real scroll to the right container. Inline styles are used if not definied_
 
 ## Options and Settings
 
@@ -249,7 +248,6 @@ smoothscroll.preventScroll = false; // let it free
 
 
 
-
 <!-- ROADMAP -->
 ## Roadmap
 
@@ -257,6 +255,12 @@ smoothscroll.preventScroll = false; // let it free
 - [x] destroy method
 - [x] horizontal scroll support
 - [ ] add a scroll bar
+
+
+<!-- Websites using smooth-scrollr-->
+## Who is Using
+- [de-jaune-et-de-bleu.com](https://www.de-jaune-et-de-bleu.com/)
+- [gabriel-cuallado.com](https://gabriel-cuallado.com/)
 
 
 <!-- CONTRIBUTING -->
