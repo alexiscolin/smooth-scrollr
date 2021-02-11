@@ -162,22 +162,57 @@ const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 | `resize`      | `boolean` | `true`     | Enable auto resize                                                                                                                                                                                                                                                                                                             |
 |  `initFuncs`  | `array`   |            | Array of functions that must be fired after the instance has been initialised. If `preload`, init takes place after the event                                                                                                                                                                                                  |
 ## Methods
-| Methods      | Description                                                                                                                                                                                                                                                            | Arguments                                                                                                                                      | Exemple                                                              |
-|--------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------|
-| `scrollTo`   | In order to force scroll to a location on the webpage. This method has two parameters, the first one is for the location on the page (in px) and the second one is used to tell the method if you want a smooth scroll or an imediate position rendering (true/false). | - `dir` : *(number)* - the position in px you want to go on the page<br>- `imediate` : *(boolean - default: false)* - go without smooth effect | `smoothscroll.scrollTo(0, true); // go to the top without smoothing` |
-| `scrollFrom` | In order to scroll from a specific number of pixel                                                                                                                                                                                                                     | - `path` : *(number)* - the number of px you want the page jump<br>- `imediate` : *(boolean - default: false)* without smooth effect           | `smoothscroll.scrollTo(200); // step of 200px in smooth way`         |
-| `on`         | In order to add a listener function on a specific scroll event                                                                                                                                                                                                         |                                                                                                                                                |                                                                      |
-| `off`        | In order to remove a listener                                                                                                                                                                                                                                          |                                                                                                                                                |                                                                      |
-| `resize`     | In order to recalculate scroll container size                                                                                                                                                                                                                          |                                                                                                                                                | `smoothscroll.resize()`                                              |
-| `destroy`    | In order to destroy smooth-scroll class instance and all its properties.                                                                                                                                                                                               |                                                                                                                                                | `smoothscroll.destroy()`                                             |
+| Methods      | Description                                                         | Arguments                                                                                                                                                                                                                                                                                                                                       |
+|--------------|---------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `scrollTo`   | In order to force scroll to a location on the webpage.              | `dir` : *(number)* - the position in px you want to go on the page<br>- `imediate` : *(boolean - default: false)* - go with/without smooth effect                                                                                                                                                                                               |
+| `scrollFrom` | In order to scroll from a specific number of pixel.                 | `path` : *(number)* - the distance in px you want the page go through<br>- `imediate` : *(boolean - default: false)* with/without smooth effect                                                                                                                                                                                                 |
+| `getSize`    | In order to get the scroller container size.                        |                                                                                                                                                                                                                                                                                                                                                 |
+| `on`         | In order to add a listener function on a specific scroll event.     | `event` : *(string)* - the instance event you want to listen (see the list below)<br>`callback` : *(function)* - the function you want to trigger when the event is dispatched<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do)                            |
+| `off`        | In order to remove a listener function on a specific scroll event.  | `event` : *(string)* - the instance event you want to remove a listener (see the list below)<br>`callback` : *(function)* - the function you want to remove (use the same as you set to add the listener)<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do) |
+| `resize`     | In order to recalculate scroll container.                           |                                                                                                                                                                                                                                                                                                                                                 |
+| `destroy`    | In order to destroy scroll container.                               |                                                                                                                                                                                                                                                                                                                                                 |
 
+### Exemples :
+#### Force imediate scroll
+
+```javascript
+smoothscroll.scrollTo(0, true); // go to the top without smoothing
+```
+
+#### Smooth scroll of 200px
+
+```javascript
+smoothscroll.scrollFrom(200, false); // go 200px forward smoothly
+```
+
+#### Add a callback to scroll instance event
+
+```javascript
+const callback = () => { console.log('yeah!!')}
+smoothscroll.on('click', callback); // 'yeah!!` appears in the console during the scroll
+```
+
+#### Remove a callback to scroll instance event
+
+```javascript
+smoothscroll.off('click', callback); // use the same previous callback function
+```
+
+#### Destroy scroll instance
+
+```javascript
+smoothscroll.destroy(); // all events are removed and the instance has been killed
+```
 
 ## Events
-#### ```init``` -> inside the opts at start (after preload)
-#### ```scroll``` -> fired during scroll
-#### ```collisionTop``` -> fired when the scroll is at top of the page
-#### ```collisionBottom``` -> fired when the scroll is at bottom of the page
-#### ```collisionEnded``` -> fired once when the scroll stop to be blocked by the collision with page edges.
+
+| Event             | Description                                                                      |
+|-------------------|----------------------------------------------------------------------------------|
+| `scroll`          | trigger during scroll                                                            |
+| `collisionTop`    | trigger when the scroll is at top of the page                                    |
+| `collisionBottom` | trigger when the scroll is at bottom of the page                                 |
+| `collisionEnded`  | trigger once when the scroll stop to be blocked by the collision with page edges |
+
 
 
 
