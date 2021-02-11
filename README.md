@@ -21,8 +21,6 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 [![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
@@ -32,7 +30,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/github_username/repo_name">
+  <a href="https://github.com/alexiscolin/smooth-scrollr">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -42,11 +40,11 @@
     Simple smooth scrolling module based on fake scroll events (aka wheel and touch and keyPress...).
     <br />
     <br />
-    <a href="https://github.com/github_username/demos">View Demo</a>
+    <a href="https://github.com/alexiscolin/demos">View Demo</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
+    <a href="https://github.com/alexiscolin/smooth-scrollr/issues">Report Bug</a>
     ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+    <a href="https://github.com/alexiscolin/smooth-scrollr/issues">Request Feature</a>
   </p>
 </p>
 
@@ -69,12 +67,17 @@
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
+    <li><a href="#usage">Usage</a>
+        <ul>
+            <li><a href="#options-and-settings">Options and Settings</a></li>
+            <li><a href="#methods">Methods</a></li>
+            <li><a href="#events">Events</a></li>
+        </ul>
+    </li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -133,6 +136,23 @@ This is an example of how to list things you need to use the software and how to
 
 Basic usage :
 
+```html
+<main class="" id="section">
+    <section class="" data-scroll-container>
+        <article class=""></article>
+        <article class=""></article>
+        <article class=""></article>
+    </section>
+    <section class="" data-scroll-container>
+        <article class=""></article>
+        <article class=""></article>
+        <article class=""></article>
+    </section>
+    ...
+</main>
+```
+_Note: data-scroll-container are optional but recommended to improve long page performance._
+
 ``` javascript
 import { SmoothScroll } from 'smooth-scrollr';
 
@@ -161,6 +181,12 @@ const smoothscroll = new SmoothScroll(opts, 'fixedClass');
 | `preload`     | `boolean` | `true`     | Enable preload media function in order to resize page after async                                                                                                                                                                                                                                                              |
 | `resize`      | `boolean` | `true`     | Enable auto resize                                                                                                                                                                                                                                                                                                             |
 |  `initFuncs`  | `array`   |            | Array of functions that must be fired after the instance has been initialised. If `preload`, init takes place after the event                                                                                                                                                                                                  |
+
+## Element attribute
+
+- **data-scroll-container** : create a scrollable container inside the `section`. Splitting the page into smaller container is good to improve performance. Only the viewed container will move, so lighten containers will move one after the other. This is totaly optional.
+
+
 ## Methods
 | Methods      | Description                                                         | Arguments                                                                                                                                                                                                                                                                                                                                       |
 |--------------|---------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -271,15 +297,11 @@ Project Link: [https://github.com/alexiscolin/smooth-scrollr](https://github.com
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/github_username/repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/github_username/repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/github_username/repo.svg?style=for-the-badge
-[forks-url]: https://github.com/github_username/repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/github_username/repo.svg?style=for-the-badge
-[stars-url]: https://github.com/github_username/repo/stargazers
+[contributors-shield]: https://img.shields.io/github/contributors/alexiscolin/smooth-scrollr.svg?style=for-the-badge
+[contributors-url]: https://github.com/alexiscolin/smooth-scrollr/graphs/contributors
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo/issues
 [license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
+[license-url]: https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/alexiscolin
