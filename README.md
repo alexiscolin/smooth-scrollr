@@ -277,7 +277,7 @@ Distributed under the MIT License. See [LICENCE FILE](https://github.com/alexisc
 <!-- CONTACT -->
 ## Contact
 
-Alexis Colin - [linkedin](https://www.linkedin.com/in/alexiscolin/) - alexis@jaunebleu.com
+Alexis Colin - [linkedin](https://www.linkedin.com/in/alexiscolin/) - alexis@jaunebleu.co
 
 Project Link: [https://github.com/alexiscolin/smooth-scrollr](https://github.com/alexiscolin/smooth-scrollr)
 
