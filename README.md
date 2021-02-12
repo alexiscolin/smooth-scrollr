@@ -148,17 +148,31 @@ Basic usage :
 _Note: data-scroll-container are optional but recommended to improve long page performance._
 
 ``` javascript
-import { SmoothScroll } from 'smooth-scrollr';
+import { SmoothScrollr } from 'smooth-scrollr';
 
 const opts = {
   section: document.querySelector('#section'),
   speed: .8,
 };
 
-const smoothscroll = new SmoothScroll(opts, 'fixedClass');
+const smoothscroll = new SmoothScrollr(opts, 'fixedClass');
 
 ```
 _Note: 'fixedClass' is optional and set the class you define to block real scroll to the right container. Inline styles are used if not definied_
+
+
+### ...Or in a global way (without bundler)
+Get the `smooth-scrollr.min.js` file inside the `dist` folder. Then, use it in the html file :
+
+```html
+<script src="smooth-scrollr.min.js"></script>
+<script>
+    (function () {
+        const opts = {/*opts here */};
+        var scroll = new SmoothScrollr(opts);
+    })();
+</script>
+```
 
 ## Options and Settings
 

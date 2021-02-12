@@ -1,8 +1,8 @@
 {
   "name": "smooth-scrollr",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "🖱Simple smooth scrolling in JS",
-  "main": "./dist/smooth-scrollr.js",
+  "main": "./dist/smooth-scrollr.umd.js",
   "scripts": {
     "start": "webpack serve --mode development --config config/demos.config.js",
     "build": "webpack --mode production --config config/webpack.config.js"

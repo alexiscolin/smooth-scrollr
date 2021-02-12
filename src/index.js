@@ -9,7 +9,7 @@ import { getTranslate } from './modules/utils';
 /*==============================*/
 /*==============================*/
 
-var SmoothScroll = function (config = {}, viewPortclass = null) {
+var SmoothScrollr = function (config = {}, viewPortclass = null) {
     this.DOM = {};
     this.config = {};
     this.move = {};
@@ -20,7 +20,7 @@ var SmoothScroll = function (config = {}, viewPortclass = null) {
 };
   
   
-SmoothScroll.prototype = function () {
+SmoothScrollr.prototype = function () {
   
     /***********************
      ****** PRIVATES ******
@@ -408,5 +408,5 @@ SmoothScroll.prototype = function () {
     }
   }();
   
-  export { SmoothScroll };
+  export { SmoothScrollr };
   

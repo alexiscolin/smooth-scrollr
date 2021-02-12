@@ -6,7 +6,6 @@ import {SmoothScroll} from '../../src/index.js';
     const container = document.querySelector('#section');
 
     const opts = {
-        callback: [],
         touch: true,
         delay: .08,
         direction: direction,
