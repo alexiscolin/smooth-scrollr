@@ -14,7 +14,6 @@ var SmoothScrollr = function (config = {}, viewPortclass = null) {
     this.config = {};
     this.move = {};
     this.sections = [];
-    this.scrollStatut = 'start';
   
     this.init(config, viewPortclass);
 };
@@ -251,6 +250,9 @@ SmoothScrollr.prototype = function () {
         /** VARIABLES  **/
         // config init
         Object.assign(this.config, options, config);
+
+        this.scrollStatut = 'start';
+
         
         // DOM elements init
         this.DOM.scroller = config.section;
