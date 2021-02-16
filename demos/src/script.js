@@ -1,5 +1,5 @@
 import "./styles.css";
-import {SmoothScroll} from '../../src/index.js';
+import {SmoothScrollr} from '../../src/index.js';
 
 (function(){
     const direction = document.body.dataset.scroll;
@@ -15,6 +15,6 @@ import {SmoothScroll} from '../../src/index.js';
         jump: 120,
     };
 
-    const scroll = new SmoothScroll(opts);
+    const scroll = new SmoothScrollr(opts);
 
 })()
