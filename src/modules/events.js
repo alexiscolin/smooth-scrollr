@@ -17,14 +17,14 @@ Events.prototype = function () {
     /*  EVENTS - events binded to the DOM through addEventListener  */
     /*  @param {object} e - event properties */
     /* */
-   const _onWheel = function (e) {
+   const _onWheel = function _onWheel(e) {
         //   e.preventDefault(); //need it here ?
         const dir = Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
         this.move.dest += (this.runFirefox && e.deltaMode == 1) ? dir * this.config.speed * this.config.multFirefox : dir * this.config.speed;
         this.callback(); // start animation
     };
 
-    const _onTouchStart = function (e) {
+    const _onTouchStart = function _onTouchStart(e) {
         const t = (e.targetTouches) ? e.targetTouches[0] : e;
         this.move.touch = {
             pageY:  t.pageY,
@@ -32,7 +32,7 @@ Events.prototype = function () {
         };
     };
 
-    const _onTouchMove = function (e) {
+    const _onTouchMove = function _onTouchMove(e) {
         const t = (e.targetTouches) ? e.targetTouches[0] : e;
         const moveY = t.pageY;
         const moveX = t.pageX;
@@ -49,7 +49,7 @@ Events.prototype = function () {
         this.callback.call(this); // start animation
     };
 
-    const _onKeydown = function (e) {
+    const _onKeydown = function _onKeydown(e) {
         if (e.keyCode === 38 || e.keyCode === 40) e.preventDefault();
 
         // if downKey is pressed, then jump + else if upKey is pressed, then jump - else 0
@@ -58,13 +58,13 @@ Events.prototype = function () {
         this.callback.call(this); // start animation
     };
 
-    const _onScroll = function (e) {
+    const _onScroll = function _onScroll(e) {
         this.move.dest = window.scrollY || window.pageYOffset;
         this.callback.call(this); // start animation
     };
 
 
-    const _deviceDetectEvent = function () {
+    const _deviceDetectEvent = function _deviceDetectEvent() {
         return {
             wheel: 'onwheel' in document,
             mouseWheel: 'onmousewheel' in document,
@@ -78,7 +78,7 @@ Events.prototype = function () {
     ****** PUBLIC ********
     *********************/
 
-    const init = function (config, callback) {
+    const init = function init(config, callback) {
         Object.assign(this.config, config);
         this.callback = callback;
 
@@ -96,7 +96,7 @@ Events.prototype = function () {
 
     };
 
-    const domEvent = function (method = 'bind') {
+    const domEvent = function domEvent(method = 'bind') {
         const listener = method === 'bind' ? 'addEventListener' : (method === 'unbind' ? 'removeEventListener' : null);
         if (listener === null) throw "_domEvent function - wrong method! expect 'bind' || 'unbind' : got " + method;
         
@@ -123,11 +123,11 @@ Events.prototype = function () {
         }
     };
 
-    const enableSmoothScroll = function () {
+    const enableSmoothScroll = function enableSmoothScroll() {
         return this.enableSmoothScroll;
     };
 
-    const destroy = function () {
+    const destroy = function destroy() {
 
         for (let prop in this) {
             if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;

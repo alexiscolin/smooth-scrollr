@@ -1,7 +1,7 @@
 /**
 /*  GET-TRANSLATE - get translation style utility  */
 /* */
-const getTranslate = function (el) {
+const getTranslate = function getTranslate(el) {
     const translate = {}
     if(!window.getComputedStyle) return;
 

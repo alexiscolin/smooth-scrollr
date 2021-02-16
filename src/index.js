@@ -36,7 +36,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  REQUEST-TICK - request an animation from rAF if rAF is available  */
     /* */
-    const _requestTick = function () {
+    const _requestTick = function _requestTick () {
         if (!this.config.ticking) {
             this.rAF = requestAnimationFrame(_update.bind(this));
             this.config.ticking = true; // wait for a ticket before request a new rAF
@@ -46,7 +46,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  UPDATE - run animation in requestAnimationFrame  */
     /* */
-    _update = function () {
+    _update = function _update() {
         cancelAnimationFrame(this.rAF);
         this.rAF = requestAnimationFrame(_update.bind(this));
         
@@ -118,7 +118,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  FIXED-VIEWPORT - block the viewport for smoothscroll with class or inline style */
     /* */
-    _fixedViewPort = function () {
+    _fixedViewPort = function _fixedViewPort() {
   
         // set the container sticky
         if (this.config.fixedClass) {
@@ -138,7 +138,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  ADD-SECTION - Create info and observer for section on the page  */
     /* */
-    _addSection = function () {
+    _addSection = function _addSection() {
         this.sections = [];
         let sections = this.DOM.scroller.querySelectorAll(`[data-scroll-container]`);
         if (sections.length === 0) {
@@ -172,7 +172,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  _SCROLL-CALLBACKS - fire event */
     /* */
-    _scrollCallback = function (event = 'scroll') {
+    _scrollCallback = function _scrollCallback(event = 'scroll') {
         const scrollEvent = new Event(`on-${event}`);
         this.DOM.scroller.dispatchEvent(scrollEvent);
     },
@@ -180,7 +180,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  _LIST-CALLBACKS - events callbacks actions  */
     /* */
-    _listCallbacks = function (e) {
+    _listCallbacks = function _listCallbacks(e) {
         // get real name
         const eventName = e.type.replace('on-','');
         // get the global list of dedicated event
@@ -203,7 +203,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  BIND-EVENT - bind events to the DOM && start rAF */
     /* */
-    _bindEvent = function () {
+    _bindEvent = function _bindEvent() {
         this.events.enableSmoothScroll && _fixedViewPort.call(this);
         this.events.domEvent('bind');
 
@@ -217,7 +217,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  UNBIND-EVENT - unbind events from the DOM && stop rAF */
     /* */
-    _unbindEvent = function () {
+    _unbindEvent = function _unbindEvent() {
         // remove internal scroll events
         this.events.domEvent('unbind');
 
@@ -247,7 +247,7 @@ SmoothScrollr.prototype = function () {
      ****** PUBLICS ******
      *********************/
   
-    const init = function (config, viewPortclass) {
+    const init = function init(config, viewPortclass) {
         /** VARIABLES  **/
         // config init
         Object.assign(this.config, options, config);
@@ -287,7 +287,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  GET-SIZE - get container size */
     /* */
-    getSize = function () { 
+    getSize = function getSize() { 
         const dirVert = this.config.direction === 'vertical';
         let size = dirVert ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))
        
@@ -302,7 +302,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  SCROLL-TO - scroll to given location */
     /* */
-    scrollTo = function (dir, immediate = false) {
+    scrollTo = function scrollTo(dir, immediate = false) {
         this.move.dest = dir;
         immediate || (_requestTick.call(this)); // start animation
         immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
@@ -311,7 +311,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  SCROLL-OF - scroll of given path */
     /* */
-    scrollOf = function (path, immediate = false) {
+    scrollOf = function scrollOf(path, immediate = false) {
         this.move.dest += path;
         immediate || (_requestTick.call(this)); // start animation
         immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
@@ -321,7 +321,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  RESIZE - recalc vars after a resize */
     /* */
-    resize = function () {
+    resize = function resize() {
         _addSection.call(this);
         this.config.scrollMax = getSize.call(this);
     },
@@ -329,14 +329,14 @@ SmoothScrollr.prototype = function () {
     /**
     /*  PREVENT-SCROLL - recalc vars after a resize */
     /* */
-    preventScroll = function (state) {
+    preventScroll = function preventScroll(state) {
         this.prevent = state;
     },
 
     /**
     /*  ON - public event binder */
     /* */
-    on = function (event, cb, context = this.DOM.scroller) {
+    on = function on(event, cb, context = this.DOM.scroller) {
         const events = [
             'scroll',
             'collisionTop',
@@ -364,7 +364,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  OFF - remove public events */
     /* */
-    off = function (event, cb, context = this.DOM.scroller) {
+    off = function off(event, cb, context = this.DOM.scroller) {
         const list = callbackslisteners[event];
         // remove event from original events listing index
         list.forEach((el, index) => el === cb && list.splice(index,1))
@@ -379,7 +379,7 @@ SmoothScrollr.prototype = function () {
     /**
     /*  DESTROY - destroy content */
     /* */
-    destroy = function () {
+    destroy = function destroy() {
 
         if(this.preload) this.preload.destroy()
   

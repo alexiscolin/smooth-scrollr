@@ -18,14 +18,14 @@ Preloader.prototype = function () {
     /**
     /*  _DISPATCHEVENT - callbacks for fail or success */
     /* */
-    const _dispatchEvent = function (event) {
+    const _dispatchEvent = function _dispatchEvent(event) {
         this.events[event].forEach(fn => fn());
     };
 
     /**
     /*  _LOAD - load all assets in promise */
     /* */
-    const _load = function () {
+    const _load = function _load() {
         const medias = [...this.DOM.querySelectorAll('img[src], video')];
         if (medias.length <= 0) {
             _dispatchEvent.call(this, 'success');
@@ -100,7 +100,7 @@ Preloader.prototype = function () {
     /**
     /*  INIT - init function */
     /* */
-    const init = function (DOM, events) {
+    const init = function init(DOM, events) {
         Object.assign(this.events, events);
         this.DOM = DOM;
 
@@ -111,7 +111,7 @@ Preloader.prototype = function () {
     /**
     /*  DESTROY - destroy content */
     /* */
-    const destroy = function () {
+    const destroy = function destroy() {
         for (let prop in this) {
             if (!Object.prototype.hasOwnProperty.call(this, prop)) continue;
   
