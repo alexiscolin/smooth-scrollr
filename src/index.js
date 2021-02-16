@@ -9,13 +9,13 @@ import { getTranslate } from './modules/utils';
 /*==============================*/
 /*==============================*/
 
-var SmoothScrollr = function (config = {}, viewPortclass = null) {
+var SmoothScrollr = function (config = {}) {
     this.DOM = {};
     this.config = {};
     this.move = {};
     this.sections = [];
   
-    this.init(config, viewPortclass);
+    this.init(config);
 };
   
   
@@ -246,10 +246,11 @@ SmoothScrollr.prototype = function () {
      ****** PUBLICS ******
      *********************/
   
-    const init = function init(config, viewPortclass) {
+    const init = function init(config) {
         /** VARIABLES  **/
         // config init
         Object.assign(this.config, options, config);
+        console.log(this.config)
 
         this.scrollStatut = 'start';
 

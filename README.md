@@ -153,9 +153,10 @@ import { SmoothScrollr } from 'smooth-scrollr';
 const opts = {
   section: document.querySelector('#section'),
   speed: .8,
+  fixedClass: 'fixedClass'
 };
 
-const smoothscroll = new SmoothScrollr(opts, 'fixedClass');
+const smoothscroll = new SmoothScrollr(opts);
 
 ```
 _Note: 'fixedClass' is optional and set the class you define to block real scroll to the right container. Inline styles are used if not definied_
