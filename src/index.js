@@ -9,7 +9,7 @@ import { getTranslate } from './modules/utils';
 /*==============================*/
 /*==============================*/
 
-var SmoothScrollr = function (config = {}) {
+var SmoothScrollr = function SmoothScrollr(config = {}) {
     this.DOM = {};
     this.config = {};
     this.move = {};
