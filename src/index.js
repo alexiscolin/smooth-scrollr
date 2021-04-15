@@ -122,14 +122,6 @@ SmoothScrollr.prototype = function () {
         // set the container sticky
         if (this.config.fixedClass) {
             this.DOM.container.classList.add(this.config.fixedClass);
-        } else {
-            this.DOM.container.style.overflow = 'hidden';
-            this.DOM.container.style.height = '100%';
-            if ('CSS' in window && CSS.supports('overscroll-behavior', 'none')) {
-                document.body.style.overscrollBehavior = 'none';
-            } else {
-                document.body.style.overflow = 'hidden';
-            }
         }
         return true;
     },
@@ -291,13 +283,7 @@ SmoothScrollr.prototype = function () {
     /* */
     getSize = function getSize() { 
         const dirVert = this.config.direction === 'vertical';
-        let size = dirVert ? (this.DOM.scroller.offsetHeight - (document.documentElement.clientHeight || window.innerHeight)) : (this.DOM.scroller.offsetWidth - (document.documentElement.clientWidth || window.innerWidth))
-       
-        // if parent doesn't wrap completely section children
-        // if (size === 0) {
-            // size = this.sections.reduce((result, section) => result + (this.config.direction === 'vertical' ? section.boundrect.height : section.boundrect.width), 0);
-            // size -= dirVert ? (document.documentElement.clientHeight || window.innerHeight) : (document.documentElement.clientWidth || window.innerWidth);
-        // }
+        let size = dirVert ? (this.DOM.scroller.offsetHeight - this.DOM.scroller.parentElement.clientHeight) : (this.DOM.scroller.offsetWidth - this.DOM.scroller.parentElement.clientWidth);
         return size;
     },
 
