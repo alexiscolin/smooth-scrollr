@@ -104,22 +104,22 @@ Events.prototype = function () {
         if (this.enableSmoothScroll) {
   
             // Events modifications
-            this.deviceHasEvents.wheel && (this._wheelFunc || (this._wheelFunc = _onWheel.bind(this))) && document[listener]('wheel', this._wheelFunc, false);
-            this.deviceHasEvents.mouseWheel && (this._mouWheelFunc || (this._mouWheelFunc = _onWheel.bind(this))) && document[listener]('mousewheel', this._mouWheelFunc, false);
-            this.deviceHasEvents.keys && (this._keysFunc || (this._keysFunc = _onKeydown.bind(this))) && document[listener]('keydown', this._keysFunc, false);
+            this.deviceHasEvents.wheel && (this._wheelFunc || (this._wheelFunc = _onWheel.bind(this))) && this.config.section[listener]('wheel', this._wheelFunc, false);
+            this.deviceHasEvents.mouseWheel && (this._mouWheelFunc || (this._mouWheelFunc = _onWheel.bind(this))) && this.config.section[listener]('mousewheel', this._mouWheelFunc, false);
+            this.deviceHasEvents.keys && (this._keysFunc || (this._keysFunc = _onKeydown.bind(this))) && this.config.section[listener]('keydown', this._keysFunc, false);
   
             if (this.deviceHasEvents.touch) {
                 !this._touchStatFunc && (this._touchStatFunc = _onTouchStart.bind(this));
                 !this._touchMoveFunc && (this._touchMoveFunc = _onTouchMove.bind(this));
   
-                document[listener]("touchstart", this._touchStatFunc);
-                document[listener]("touchmove", this._touchMoveFunc);
+                this.config.section[listener]("touchstart", this._touchStatFunc);
+                this.config.section[listener]("touchmove", this._touchMoveFunc);
             }
   
         } else if (this.config.parallax) {
             // bind scroll if touch is disabled and parallax enabled
             !this._scrollFunc && (this._scrollFunc = _onScroll.bind(this));
-            document[listener]("scroll", this._scrollFunc, false);
+            this.config.section[listener]("scroll", this._scrollFunc, false);
         }
     };
 

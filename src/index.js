@@ -250,7 +250,6 @@ SmoothScrollr.prototype = function () {
         /** VARIABLES  **/
         // config init
         Object.assign(this.config, options, config);
-        console.log(this.config)
 
         this.scrollStatut = 'start';
 
@@ -281,7 +280,7 @@ SmoothScrollr.prototype = function () {
   
   
         //bind events
-        const eventOpt = (({touch, parallax, speed, multFirefox, touchSpeed, jump}) => ({touch, parallax, speed, multFirefox, touchSpeed, jump}))(this.config);
+        const eventOpt = (({touch, parallax, speed, multFirefox, touchSpeed, jump, section}) => ({touch, parallax, speed, multFirefox, touchSpeed, jump, section}))(this.config);
         this.events = new Events(eventOpt, _requestTick.bind(this));
         _bindEvent.call(this);
         
