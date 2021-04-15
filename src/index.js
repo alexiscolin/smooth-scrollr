@@ -124,7 +124,7 @@ SmoothScrollr.prototype = function () {
             this.DOM.container.classList.add(this.config.fixedClass);
         } else {
             this.DOM.container.style.overflow = 'hidden';
-            this.DOM.container.style.height = '100vh';
+            this.DOM.container.style.height = '100%';
             if ('CSS' in window && CSS.supports('overscroll-behavior', 'none')) {
                 document.body.style.overscrollBehavior = 'none';
             } else {
