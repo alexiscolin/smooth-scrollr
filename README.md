@@ -31,7 +31,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/alexiscolin/smooth-scrollr">
-    <img src="https://files.de-jaune-et-de-bleu.com/img/github/smooth-scrollr/smooth-scroller-logo.png" alt="Logo" width="80" height="80">
+    <img src="https://files.jaunebleu.co/img/github/smooth-scrollr/smooth-scroller-logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">🖱️ smooth-scrollr</h3>
@@ -265,7 +265,7 @@ smoothscroll.destroy(); // all events are removed and the instance has been kill
 
 <!-- Websites using smooth-scrollr-->
 ## Who is Using
-- [de-jaune-et-de-bleu.com](https://www.de-jaune-et-de-bleu.com/)
+- [jaunebleu.co](https://jaunebleu.co/)
 - [gabriel-cuallado.com](https://gabriel-cuallado.com/)
 
 
