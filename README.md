@@ -227,13 +227,13 @@ smoothscroll.scrollFrom(200, false); // go 200px forward smoothly
 
 ```javascript
 const callback = () => { console.log('yeah!!')}
-smoothscroll.on('click', callback); // 'yeah!!` appears in the console during the scroll
+smoothscroll.on('scroll', callback); // 'yeah!!` appears in the console during the scroll
 ```
 
 #### Remove a callback to scroll instance event
 
 ```javascript
-smoothscroll.off('click', callback); // use the same previous callback function
+smoothscroll.off('scroll', callback); // use the same previous callback function
 ```
 
 #### Destroy scroll instance
