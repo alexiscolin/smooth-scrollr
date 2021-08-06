@@ -227,7 +227,8 @@ smoothscroll.scrollFrom(200, false); // go 200px forward smoothly
 
 ```javascript
 const callback = () => { console.log('yeah!!')}
-smoothscroll.on('scroll', callback); // 'yeah!!` appears in the console during the scroll
+smoothscroll.on('scroll', callback); // 'yeah!!` appears in the console during the scroll.
+// You can access scroll position as parameter in callbak function (scroll event only)
 ```
 
 #### Remove a callback to scroll instance event
