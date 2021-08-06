@@ -345,7 +345,7 @@ SmoothScrollr.prototype = function () {
         // listen if related function
         if (list.length === 1) {
             bindedlisteners[event] = _listCallbacks.bind(this);
-            context.addEventListener(context !== window ? 'on-' : '' + event, bindedlisteners[event], false);
+            context.addEventListener((context !== window ? 'on-' : '') + event, bindedlisteners[event], false);
         }
     },
 
