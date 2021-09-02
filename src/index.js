@@ -35,9 +35,9 @@ SmoothScrollr.prototype = function () {
     /**
     /*  REQUEST-TICK - request an animation from rAF if rAF is available  */
     /* */
-    const _requestTick = function _requestTick () {
+    const _requestTick = function _requestTick (immediate = false) {
         if (!this.config.ticking) {
-            this.rAF = requestAnimationFrame(_update.bind(this));
+            this.rAF = requestAnimationFrame(_update.bind(this, immediate)); // ask immediate for a direct scroll (no smooth anymore)
             this.config.ticking = true; // wait for a ticket before request a new rAF
         }
     },
@@ -45,9 +45,9 @@ SmoothScrollr.prototype = function () {
     /**
     /*  UPDATE - run animation in requestAnimationFrame  */
     /* */
-    _update = function _update() {
+    _update = function _update(immediate = false) {
         cancelAnimationFrame(this.rAF);
-        this.rAF = requestAnimationFrame(_update.bind(this));
+        this.rAF = requestAnimationFrame(_update.bind(this, immediate));
         
         // scroll action in function of scroll position (statut)
         if(this.move.dest >= this.config.scrollMax && this.scrollStatut !== 'end'){
@@ -72,7 +72,7 @@ SmoothScrollr.prototype = function () {
         this.move.dest = this.prevent ? this.move.current : Math.round(Math.max(0, Math.min(this.events.dest, this.config.scrollMax)));
         this.events.dest = this.move.dest;
 
-        // cancel or not the scroll
+        // cancel or not the scroll (with immediate condition)
         if(this.prevent) {
             this.move.prev = this.move.dest;
             this.events.dest = this.events.dest
@@ -83,7 +83,7 @@ SmoothScrollr.prototype = function () {
 
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
-            this.move.current += this.prevent ? 0 : (this.move.dest - this.move.current) * this.config.delay;
+            this.move.current = immediate ? this.events.dest : this.prevent ? this.move.current : this.move.current + ((this.move.dest - this.move.current) * this.config.delay);
   
             // update scroll && parallax positions
             this.move.position = -this.move.current.toFixed(2);
@@ -292,8 +292,7 @@ SmoothScrollr.prototype = function () {
     /* */
     scrollTo = function scrollTo(dir, immediate = false) {
         this.events.dest = dir;
-        immediate || (_requestTick.call(this));
-        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? -dir : 0}px,${this.config.direction === 'vertical' ? -dir : 0}px, 0)`);
+        _requestTick.call(this, immediate);
     },
 
     /**
@@ -301,9 +300,8 @@ SmoothScrollr.prototype = function () {
     /* */
     scrollOf = function scrollOf(path, immediate = false) {
         this.events.dest += path;
-        immediate || (_requestTick.call(this)); // start animation
-        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? -path : 0}px,${this.config.direction === 'vertical' ? -path : 0}px, 0)`);
-        return 'true';
+        _requestTick.call(this, immediate);
+        return this.events.dest;
     },
 
     /**
