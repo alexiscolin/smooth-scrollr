@@ -291,18 +291,18 @@ SmoothScrollr.prototype = function () {
     /*  SCROLL-TO - scroll to given location */
     /* */
     scrollTo = function scrollTo(dir, immediate = false) {
-        this.move.dest = dir;
-        immediate || (_requestTick.call(this)); // start animation
-        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
+        this.events.dest = dir;
+        immediate || (_requestTick.call(this));
+        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? -dir : 0}px,${this.config.direction === 'vertical' ? -dir : 0}px, 0)`);
     },
 
     /**
     /*  SCROLL-OF - scroll of given path */
     /* */
     scrollOf = function scrollOf(path, immediate = false) {
-        this.move.dest += path;
+        this.events.dest += path;
         immediate || (_requestTick.call(this)); // start animation
-        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? dir : 0}px,${this.config.direction === 'vertical' ? dir : 0}px, 0)`);
+        immediate && (this.DOM.scroller.style.transform = this.events.enableSmoothScroll && `translate3D(${this.config.direction === 'horizontal' ? -path : 0}px,${this.config.direction === 'vertical' ? -path : 0}px, 0)`);
         return 'true';
     },
 
