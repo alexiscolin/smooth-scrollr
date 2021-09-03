@@ -83,8 +83,14 @@ SmoothScrollr.prototype = function () {
 
         // calc new value of scroll if there was a scroll
         if (this.move.prev !== this.move.dest) {
-            this.move.current = immediate ? this.events.dest : this.prevent ? this.move.current : this.move.current + ((this.move.dest - this.move.current) * this.config.delay);
-  
+            // immediate rendering ? 
+            if(immediate) {
+                this.move.current = this.events.dest;
+                this.move.prev = this.move.dest; // reset pos (even before the scroll since it's a jump)
+            } else {
+                this.move.current = this.prevent ? this.move.current : this.move.current + ((this.move.dest - this.move.current) * this.config.delay);
+            }
+
             // update scroll && parallax positions
             this.move.position = -this.move.current.toFixed(2);
 
