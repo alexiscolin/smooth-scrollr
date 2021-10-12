@@ -20,9 +20,5 @@ import {SmoothScrollr} from '../../src/index.js';
     // pos data available in 'scroll' event only
     const callback = (pos) => { console.log(pos)}
     scroll.on('scroll', callback);
-    setTimeout(_=>{
-        scroll.scrollTo(200, true);
-        console.log('scroll')
-    }, 3000)
 
 })()

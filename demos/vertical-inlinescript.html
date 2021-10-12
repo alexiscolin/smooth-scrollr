@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>smooth-scrollr vertical demo</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="./src/styles.css" rel="stylesheet">
+    </head>
+    <body data-scroll="vertical" >
+        <main class="wrapper">
+            <section class="container" id="section">
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+                <article class="container_item"></article>
+            </section>
+        </main>
+        <script src="../dist/smooth-scrollr.min.js"></script>
+        <script>
+            (function(){
+                const direction = document.body.dataset.scroll;
+                const container = document.querySelector('#section');
+            
+                const opts = {
+                    touch: true,
+                    delay: .08,
+                    direction: direction,
+                    speed: .9,
+                    section: container,
+                    touchSpeed: 2,
+                    jump: 120,
+                };
+            
+                const scroll = new SmoothScrollr(opts);
+            
+                // pos data available in 'scroll' event only
+                const callback = (pos) => {console.log(pos)}
+                scroll.on('scroll', callback);
+            })()
+        </script>
+    </body>
+</html>
