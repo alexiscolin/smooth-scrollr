@@ -32,18 +32,18 @@ SmoothScrollr.prototype = (function () {
   /**
     /*  REQUEST-TICK - request an animation from rAF if rAF is available  */
   /* */
-  const _requestTick = function _requestTick(immediate = false) {
+  const _requestTick = function _requestTick(immediate = false, cb) {
       if (!this.config.ticking) {
-        this.rAF = requestAnimationFrame(_update.bind(this, immediate)); // ask immediate for a direct scroll (no smooth anymore)
+        this.rAF = requestAnimationFrame(_update.bind(this, immediate, cb)); // ask immediate for a direct scroll (no smooth anymore)
         this.config.ticking = true; // wait for a ticket before request a new rAF
       }
     },
     /**
     /*  UPDATE - run animation in requestAnimationFrame  */
     /* */
-    _update = function _update(immediate = false) {
+    _update = function _update(immediate = false, cb) {
       cancelAnimationFrame(this.rAF);
-      this.rAF = requestAnimationFrame(_update.bind(this, immediate));
+      this.rAF = requestAnimationFrame(_update.bind(this, immediate, cb));
 
       // scroll action in function of scroll position (statut)
       if (this.move.dest >= this.config.scrollMax && this.scrollStatut !== "end") {
@@ -114,6 +114,7 @@ SmoothScrollr.prototype = (function () {
       } else {
         this.config.ticking = false;
         cancelAnimationFrame(this.rAF);
+        if (cb) cb();
       }
     },
     /**
@@ -279,16 +280,16 @@ SmoothScrollr.prototype = (function () {
     /**
     /*  SCROLL-TO - scroll to given location */
     /* */
-    scrollTo = function scrollTo(dir, immediate = false) {
+    scrollTo = function scrollTo(dir, immediate = false, cb) {
       this.events.dest = dir;
-      _requestTick.call(this, immediate);
+      _requestTick.call(this, immediate, cb);
     },
     /**
     /*  SCROLL-OF - scroll of given path */
     /* */
-    scrollOf = function scrollOf(path, immediate = false) {
+    scrollOf = function scrollOf(path, immediate = false, cb) {
       this.events.dest += path;
-      _requestTick.call(this, immediate);
+      _requestTick.call(this, immediate, cb);
       return this.events.dest;
     },
     /**
@@ -301,8 +302,12 @@ SmoothScrollr.prototype = (function () {
     /**
     /*  PREVENT-SCROLL - recalc vars after a resize */
     /* */
-    preventScroll = function preventScroll(state) {
-      this.prevent = state;
+    preventScroll = function preventScroll(state, prevent = true) {
+      if (prevent) {
+        this.prevent = state;
+      } else {
+        this.events.domEvent(state ? "unbind" : "bind");
+      }
     },
     /**
     /*  ON - public event binder */
