@@ -10,8 +10,6 @@
 *** github_username, repo_name, twitter_handle, email, project_title, project_description
 -->
 
-
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -21,11 +19,10 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 <!-- [![Contributors][contributors-shield]][contributors-url] -->
+
 [![Issues][issues-shield]][issues-url]
 [![MIT License][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -47,8 +44,6 @@
     <a href="https://github.com/alexiscolin/smooth-scrollr/issues">Request Feature</a>
   </p>
 </p>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details open="open">
@@ -82,19 +77,18 @@
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
+
 ## About The Project
 
 ### Built With
 
-* [JS ES6/7/8](https://www.ecma-international.org/technical-committees/tc39/)
-* [Babel](https://babeljs.io/)
-* [Webpack](https://webpack.js.org/)
-
+- [JS ES6/7/8](https://www.ecma-international.org/technical-committees/tc39/)
+- [Babel](https://babeljs.io/)
+- [Webpack](https://webpack.js.org/)
 
 <!-- GETTING STARTED -->
+
 ## Getting Started
 
 Made as a prototype reveal based class, initialize the module to use it.
@@ -102,12 +96,14 @@ Made as a prototype reveal based class, initialize the module to use it.
 ### Prerequisites
 
 This is an example of how to list things you need to use the software and how to install them.
-* npm
+
+- npm
+
   ```sh
   npm i smooth-scrollr@latest
   ```
 
-* yarn
+- yarn
   ```sh
   yarn add smooth-scrollr
   ```
@@ -123,94 +119,97 @@ This is an example of how to list things you need to use the software and how to
    npm install
    ```
 
-
-
 <!-- USAGE EXAMPLES -->
+
 ## Usage
 
 Basic usage :
 
 ```html
 <main class="" id="section">
-    <section class="" data-scroll-container>
-        <article class=""></article>
-        <article class=""></article>
-        <article class=""></article>
-    </section>
-    <section class="" data-scroll-container>
-        <article class=""></article>
-        <article class=""></article>
-        <article class=""></article>
-    </section>
-    ...
+  <section class="" data-scroll-container>
+    <article class=""></article>
+    <article class=""></article>
+    <article class=""></article>
+  </section>
+  <section class="" data-scroll-container>
+    <article class=""></article>
+    <article class=""></article>
+    <article class=""></article>
+  </section>
+  ...
 </main>
 ```
+
 _Note: data-scroll-container are optional but recommended to improve long page performance._
 
-``` javascript
-import { SmoothScrollr } from 'smooth-scrollr';
+```javascript
+import { SmoothScrollr } from "smooth-scrollr";
 
 const opts = {
-  section: document.querySelector('#section'),
-  speed: .8,
-  fixedClass: 'fixedClass'
+  section: document.querySelector("#section"),
+  speed: 0.8,
+  fixedClass: "fixedClass",
 };
 
 const smoothscroll = new SmoothScrollr(opts);
-
 ```
+
 _Note: 'fixedClass' is optional and set the class you define to block real scroll to the right container. Inline styles are used if not definied_
 
-
 ### ...Or in a global way (without bundler)
+
 Get the `smooth-scrollr.min.js` file inside the `dist` folder. Then, use it in the html file :
 
 ```html
 <script src="smooth-scrollr.min.js"></script>
 <script>
-    (function () {
-        const opts = {/*opts here */};
-        var scroll = new SmoothScrollr(opts);
-    })();
+  (function () {
+    const opts = {
+      /*opts here */
+    };
+    var scroll = new SmoothScrollr(opts);
+  })();
 </script>
 ```
 
 ## Options and Settings
 
-| Option        | Type      | Default    | Description                                                                                                                                                                                                                                                                                                                    |
-|---------------|-----------|------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `section`     | `object`  | `body`     | DOM section that you want to make scrollable or data-scroll-containers parent if you want to use multi wrapper option (make sure the parent wrap all children in horizontal scroll case).                                                                                                                                      |
-| `direction`   | `string`  | `vertical` | `vertical` || `horizontal` Scroll direction: If horizontal, avoid to set section width in any value other than `auto` in order to create a container that is bigger than the viewport.                                                                                                                                         |
-| `speed`       | `number`  | `1`        | Speed value on the range 0-1 that is slowing the smoothing effect.                                                                                                                                                                                                                                                             |
-| `delay`       | `number`  | `.1`       | Easing value between 0 & 1                                                                                                                                                                                                                                                                                                     |
-| `fixedClass`  | `string`  |            | The class you want to set in order to fix the viewport (at least you need `overflow: hidden` and `height: 100%` on the container and `overscroll-behavior: none` or `overflow: hidden` on the body). |
-| `touch`       | `boolean` | `false`    | Enable smooth scroll on touch event                                                                                                                                                                                                                                                                                            |
-| `touchSpeed`  | `number`  | `1.5`      | Scrolling speed on touch event                                                                                                                                                                                                                                                                                                 |
-| `jump`        | `number`  | `110`      | Scrolling step on keyPress event                                                                                                                                                                                                                                                                                               |
-| `multFirefox` | `number`  | `15`       | Scrolling speed on Firefox                                                                                                                                                                                                                                                                                                     |
-| `preload`     | `boolean` | `true`     | Enable preload media function in order to resize page after async                                                                                                                                                                                                                                                              |
-| `resize`      | `boolean` | `true`     | Enable auto resize                                                                                                                                                                                                                                                                                                             |
-|  `initFuncs`  | `array`   |            | Array of functions that must be fired after the instance has been initialised. If `preload`, init takes place after the event                                                                                                                                                                                                  |
+| Option        | Type      | Default          | Description                                                                                                                                                                                          |
+| ------------- | --------- | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `section`     | `object`  | `body`           | DOM section that you want to make scrollable or data-scroll-containers parent if you want to use multi wrapper option (make sure the parent wrap all children in horizontal scroll case).            |
+| `listened`    | `object`  | `config.section` | DOM section that will be used as scroll listener.                                                                                                                                                    |
+| `direction`   | `string`  | `vertical`       | `vertical`                                                                                                                                                                                           |     | `horizontal` Scroll direction: If horizontal, avoid to set section width in any value other than `auto` in order to create a container that is bigger than the viewport. |
+| `speed`       | `number`  | `1`              | Speed value on the range 0-1 that is slowing the smoothing effect.                                                                                                                                   |
+| `delay`       | `number`  | `.1`             | Easing value between 0 & 1                                                                                                                                                                           |
+| `fixedClass`  | `string`  |                  | The class you want to set in order to fix the viewport (at least you need `overflow: hidden` and `height: 100%` on the container and `overscroll-behavior: none` or `overflow: hidden` on the body). |
+| `touch`       | `boolean` | `false`          | Enable smooth scroll on touch event                                                                                                                                                                  |
+| `touchSpeed`  | `number`  | `1.5`            | Scrolling speed on touch event                                                                                                                                                                       |
+| `jump`        | `number`  | `110`            | Scrolling step on keyPress event                                                                                                                                                                     |
+| `multFirefox` | `number`  | `15`             | Scrolling speed on Firefox                                                                                                                                                                           |
+| `preload`     | `boolean` | `true`           | Enable preload media function in order to resize page after async                                                                                                                                    |
+| `resize`      | `boolean` | `true`           | Enable auto resize                                                                                                                                                                                   |
+| `initFuncs`   | `array`   |                  | Array of functions that must be fired after the instance has been initialised. If `preload`, init takes place after the event                                                                        |
 
 ## Element attribute
 
 - `data-scroll-container` : create a scrollable container inside the `section`. Splitting the page into smaller container is good to improve performance. Only the viewed container will move, so lighten containers will move one after the other. This is totaly optional.
 
-
 ## Methods
+
 | Methods         | Description                                                        | Arguments                                                                                                                                                                                                                                                                                                                                       |
-|-----------------|--------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `scrollTo`      | In order to force scroll to a location on the webpage.             | `dir` : *(number)* - the position in px you want to go on the page<br>- `imediate` : *(boolean - default: false)* - go with/without smooth effect                                                                                                                                                                                               |
-| `scrollOf`    | In order to scroll from a specific number of pixel.                | `path` : *(number)* - the distance in px you want the page go through. Return the scroll position<br>- `imediate` : *(boolean - default: false)* with/without smooth effect                                                                                                                                                                                                 |
+| --------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `scrollTo`      | In order to force scroll to a location on the webpage.             | `dir` : _(number)_ - the position in px you want to go on the page<br>- `imediate` : _(boolean - default: false)_ - go with/without smooth effect                                                                                                                                                                                               |
+| `scrollOf`      | In order to scroll from a specific number of pixel.                | `path` : _(number)_ - the distance in px you want the page go through. Return the scroll position<br>- `imediate` : _(boolean - default: false)_ with/without smooth effect                                                                                                                                                                     |
 | `getSize`       | In order to get the scroller container size.                       |                                                                                                                                                                                                                                                                                                                                                 |
-| `on`            | In order to add a listener function on a specific scroll event.    | `event` : *(string)* - the instance event you want to listen (see the list below)<br>`callback` : *(function)* - the function you want to trigger when the event is dispatched<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do)                            |
-| `off`           | In order to remove a listener function on a specific scroll event. | `event` : *(string)* - the instance event you want to remove a listener (see the list below)<br>`callback` : *(function)* - the function you want to remove (use the same as you set to add the listener)<br>`context` : *(object - default : section)* the content you want to listen (you should avoid to use it unless you know what you do) |
+| `on`            | In order to add a listener function on a specific scroll event.    | `event` : _(string)_ - the instance event you want to listen (see the list below)<br>`callback` : _(function)_ - the function you want to trigger when the event is dispatched<br>`context` : _(object - default : section)_ the content you want to listen (you should avoid to use it unless you know what you do)                            |
+| `off`           | In order to remove a listener function on a specific scroll event. | `event` : _(string)_ - the instance event you want to remove a listener (see the list below)<br>`callback` : _(function)_ - the function you want to remove (use the same as you set to add the listener)<br>`context` : _(object - default : section)_ the content you want to listen (you should avoid to use it unless you know what you do) |
 | `resize`        | In order to recalculate scroll container.                          |                                                                                                                                                                                                                                                                                                                                                 |
 | `destroy`       | In order to destroy scroll container.                              |                                                                                                                                                                                                                                                                                                                                                 |
-| `preventScroll` | In order to freeze scrolling movement.                             | `state` : *(boolean)* - freeze or unfreeze scroll event                                                                                                                                                                                                                                                                                         |
-
+| `preventScroll` | In order to freeze scrolling movement.                             | `state` : _(boolean)_ - freeze or unfreeze scroll event                                                                                                                                                                                                                                                                                         |
 
 ### Exemples :
+
 #### Force imediate scroll
 
 ```javascript
@@ -226,15 +225,17 @@ smoothscroll.scrollFrom(200, false); // go 200px forward smoothly
 #### Add a callback to scroll instance event
 
 ```javascript
-const callback = () => { console.log('yeah!!')}
-smoothscroll.on('scroll', callback); // 'yeah!!` appears in the console during the scroll.
+const callback = () => {
+  console.log("yeah!!");
+};
+smoothscroll.on("scroll", callback); // 'yeah!!` appears in the console during the scroll.
 // You can access scroll position as parameter in callbak function (scroll event only)
 ```
 
 #### Remove a callback to scroll instance event
 
 ```javascript
-smoothscroll.off('scroll', callback); // use the same previous callback function
+smoothscroll.off("scroll", callback); // use the same previous callback function
 ```
 
 #### Destroy scroll instance
@@ -246,16 +247,14 @@ smoothscroll.destroy(); // all events are removed and the instance has been kill
 ## Events
 
 | Event             | Description                                                                      |
-|-------------------|----------------------------------------------------------------------------------|
+| ----------------- | -------------------------------------------------------------------------------- |
 | `scroll`          | trigger during scroll                                                            |
 | `collisionTop`    | trigger when the scroll is at top of the page                                    |
 | `collisionBottom` | trigger when the scroll is at bottom of the page                                 |
 | `collisionEnded`  | trigger once when the scroll stop to be blocked by the collision with page edges |
 
-
-
-
 <!-- ROADMAP -->
+
 ## Roadmap
 
 - [x] ScrollTo method
@@ -263,14 +262,15 @@ smoothscroll.destroy(); // all events are removed and the instance has been kill
 - [x] horizontal scroll support
 - [ ] add a scroll bar
 
-
 <!-- Websites using smooth-scrollr-->
+
 ## Who is Using
+
 - [jaunebleu.co](https://jaunebleu.co/)
 - [gabriel-cuallado.com](https://gabriel-cuallado.com/)
 
-
 <!-- CONTRIBUTING -->
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **appreciated**.
@@ -281,29 +281,23 @@ Contributions are what make the open source community such an amazing place to b
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-
-
 <!-- LICENSE -->
+
 ## License
 
 Distributed under the MIT License. See [LICENCE FILE](https://github.com/alexiscolin/smooth-scrollr/blob/master/LICENSE) for more information.
 
-
-
 <!-- CONTACT -->
+
 ## Contact
 
 Alexis Colin - [linkedin](https://www.linkedin.com/in/alexiscolin/) - alexis@jaunebleu.co
 
 Project Link: [https://github.com/alexiscolin/smooth-scrollr](https://github.com/alexiscolin/smooth-scrollr)
 
-
-
-
-
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
 [contributors-shield]: https://img.shields.io/github/contributors/alexiscolin/smooth-scrollr.svg?style=for-the-badge
 [contributors-url]: https://github.com/alexiscolin/smooth-scrollr/graphs/contributors
 [issues-shield]: https://img.shields.io/github/issues/alexiscolin/smooth-scrollr.svg?style=for-the-badge
